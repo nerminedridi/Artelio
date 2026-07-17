@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARTélio - Notifications</title>
+    <link href="https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@800&family=EB+Garamond:wght@400;500;600;700&family=Gelasio:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/notifications.css">
+</head>
+<body>
+    <header class="header">
+        <h1 class="logo" data-nav="/dashboard">ARTélio</h1>
+        <button class="close-btn" data-back>
+            <i class="bi bi-x-lg"></i> Close
+        </button>
+    </header>
+
+    <main class="notifications-wrapper">
+        <div class="notifications-title-row">
+            <h1 class="notifications-title">Notifications</h1>
+            <button class="mute-all-btn" id="muteAllBtn">Silence All</button>
+        </div>
+
+        <div class="notification-list" id="notificationList">
+            <% notifications.forEach(function(n) { %>
+            <div class="notification-item">
+                <p><%= n.text %></p>
+                <span class="notification-time"><%= n.time %></span>
+            </div>
+            <% }); %>
+        </div>
+        <p class="notification-empty" id="notificationEmpty" hidden>Notifications silenced.</p>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 ARTélio. All rights reserved.</p>
+    </footer>
+    <script src="/js/main.js"></script>
+    <script>
+        if (localStorage.getItem('notificationsMuted') === 'true') {
+            document.getElementById('notificationList').hidden = true;
+            document.getElementById('muteAllBtn').hidden = true;
+            document.getElementById('notificationEmpty').hidden = false;
+        }
+        document.getElementById('muteAllBtn').addEventListener('click', () => {
+            localStorage.setItem('notificationsMuted', 'true');
+            document.getElementById('notificationList').hidden = true;
+            document.getElementById('muteAllBtn').hidden = true;
+            document.getElementById('notificationEmpty').hidden = false;
+        });
+    </script>
+</body>
+</html>

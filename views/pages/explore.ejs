@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARTélio - Explore</title>
+    <link href="https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@800&family=EB+Garamond:wght@400;500;600;700&family=Gelasio:wght@400;500;600;700&family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Luxurious+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/explore.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">ARTélio</a>
+            <nav class="nav-links">
+                <a href="/showrooms.html">Showrooms</a>
+                <a href="/curators.html">Curators</a>
+                <a href="/artists.html">Artists</a>
+                <a href="/explore.html">Explore</a>
+            </nav>
+            <div class="header-icons">
+                <button class="icon-btn" title="Search" data-nav="/search">
+                    <i class="bi bi-search"></i>
+                </button>
+                <button class="icon-btn" title="Cart" data-nav="/cart-out">
+                    <i class="bi bi-bag-heart"></i>
+                </button>
+                <% if (currentUser) { %>
+                <button class="icon-btn" title="Profile" data-nav="/dashboard"><i class="bi bi-person"></i></button>
+                <% } else { %>
+                <a href="/login" class="btn-join">Join Now</a>
+                <% } %>
+            </div>
+        </div>
+    </header>
+
+    <main>
+    <section class="hero">
+        <h1 class="hero-title">EXPLORE ARTELIO</h1>
+        <p class="hero-subtitle">Discover artists, artworks, exhibitions and stories from the community.</p>
+
+    </section>
+    <section class="section">
+        <div class="section-header">
+            <h2 class="section-title">NEWLY CREATED SHOWROOMS</h2>
+            <a href="/showrooms" class="view-all">View All →</a>
+        </div>
+
+        <div class="cards-grid showrooms-grid">
+            <% showrooms.forEach(function(room) { %>
+            <a href="/single-showroom?room=<%= room.id %>" class="showroom-card">
+                <div class="showroom-cover">
+                    <img src="<%= room.cover_image_url %>" alt="Showroom cover">
+                </div>
+                <h3 class="showroom-title"><%= room.title %></h3>
+                <p class="showroom-curator">Curated by <%= room.curator_name %></p>
+            </a>
+            <% }); %>
+        </div>
+    </section>
+    <section class="section">
+        <div class="section-header">
+            <h2 class="section-title">NEWLY ADDED ARTWORKS</h2>
+            <a href="/explore" class="view-all">View All →</a>
+        </div>
+
+        <div class="cards-grid artworks-grid">
+            <% artworks.forEach(function(artwork) { %>
+            <a href="/artwork-details?id=<%= artwork.id %>" class="artwork-card">
+                <div class="artwork-image">
+                    <img src="<%= artwork.image_url %>" alt="Artwork">
+                </div>
+                <h3 class="artwork-title"><%= artwork.title %></h3>
+                <p class="artwork-artist"><%= artwork.artist_name %></p>
+                <div class="artwork-likes">
+                    <i class="bi bi-heart-fill"></i> <%= artwork.save_count %>
+                </div>
+            </a>
+            <% }); %>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-header">
+            <h2 class="section-title">TOP ARTISTS</h2>
+            <a href="/artists" class="view-all">View All →</a>
+        </div>
+
+        <div class="artists-grid">
+            <% artists.forEach(function(artist) { %>
+            <div class="artist-card">
+                <div class="artist-header">
+                    <div class="artist-avatar">
+                        <% if (artist.avatar_url) { %>
+                        <img src="<%= artist.avatar_url %>" alt="<%= artist.username %>">
+                        <% } else { %>
+                        <i class="bi bi-person-circle"></i>
+                        <% } %>
+                    </div>
+                </div>
+                <h3 class="artist-name"><%= artist.username %></h3>
+                <p class="artist-specialty"><%= artist.bio || "Artist on ARTélio" %></p>
+                <p class="artist-stats"><%= artist.artwork_count %> Artworks • <%= artist.rating_count %> Review<%= artist.rating_count == 1 ? "" : "s" %></p>
+                <a href="/profiles?user=<%= artist.id %>" class="view-profile-btn">View Profile</a>
+            </div>
+            <% }); %>
+        </div>
+    </section>
+
+    <section class="section trending-section">
+        <h2 class="section-title">TRENDING CATEGORIES</h2>
+
+        <div class="carousel-container">
+            <div class="carousel-track">
+                <% tags.forEach(function(tag) { %>
+                <button class="category-carousel-btn"><%= tag[0].toUpperCase() + tag.slice(1) %></button>
+                <% }); %>
+                <% if (tags.length === 0) { %>
+                <p class="no-tags">No tagged artworks yet.</p>
+                <% } %>
+            </div>
+        </div>
+    </section>
+
+    <section class="section guestbook-section">
+        <div class="guestbook-header">
+            <h2 class="section-title">ARTELIO GUESTBOOK</h2>
+            <p class="guestbook-subtitle">Community Reflections</p>
+        </div>
+
+        <div class="guestbook-cards">
+            <% guestbook.forEach(function(entry) { %>
+            <div class="guestbook-card">
+                <p class="guestbook-quote">"<%= entry.message %>"</p>
+                <p class="guestbook-author">— <%= entry.username %> · <%= entry.room_title %></p>
+            </div>
+            <% }); %>
+
+            <div class="guestbook-card guestbook-reflection-box">
+                <button class="leave-reflection-btn">Leave a Reflection</button>
+            </div>
+        </div>
+    </section>
+    <section class="section featured-section">
+        <h2 class="section-title">FEATURED THIS WEEK</h2>
+
+        <div class="featured-grid">
+            <% if (featuredArtwork) { %>
+            <a href="/artwork-details?id=<%= featuredArtwork.id %>" class="featured-card">
+                <div class="featured-image">
+                    <img src="<%= featuredArtwork.image_url %>" alt="Featured artwork">
+                </div>
+                <p class="featured-label">Featured Artwork of the Week: <%= featuredArtwork.title %></p>
+            </a>
+            <% } %>
+
+            <% if (featuredShowroom) { %>
+            <a href="/single-showroom?room=<%= featuredShowroom.id %>" class="featured-card">
+                <div class="featured-image">
+                    <img src="<%= featuredShowroom.cover_image_url %>" alt="Featured showroom">
+                </div>
+                <p class="featured-label">Featured Showroom of the Week: <%= featuredShowroom.title %></p>
+            </a>
+            <% } %>
+        </div>
+    </section>
+    </div>
+    </main>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section footer-logo">
+                <div class="logo-footer">
+                    <span class="art">ART</span><span class="elio">élio</span>
+                </div>
+                <p class="footer-description">Human-curated art, made to be experienced. Discover masterpieces that speak to your soul.</p>
+            </div>
+
+            <div class="footer-section">
+                <h4><a href="/about.html">About Us</a></h4>
+                <ul>
+                    <li><a href="/about.html#story">Our Story</a></li>
+                    <li><a href="/about.html#mission">Our Mission</a></li>
+                    <li><a href="/about.html#vision">Our Vision</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4><a href="/help.html">Help</a></h4>
+                <ul>
+                    <li><a href="/help.html#faq">FAQ</a></li>
+                    <li><a href="/help.html#privacy">Privacy Policy</a></li>
+                    <li><a href="/help.html#terms">Terms and Conditions</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Get in Touch With Us</h4>
+                <div class="newsletter-form">
+                    <input type="email" placeholder="Enter your email address" class="email-input">
+                    <button class="subscribe-btn">Subscribe</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 ARTélio. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>

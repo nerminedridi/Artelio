@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARTélio - Curator Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@800&family=EB+Garamond:wght@400;500;600;700&family=Gelasio:wght@400;500;600;700&family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/dashboard-curator.css">
+</head>
+<body>
+<%
+  const activeCount = showrooms.filter((s) => s.status === "active").length;
+  const archivedCount = showrooms.filter((s) => s.status === "archived").length;
+%>
+    <header class="header">
+        <h1 class="logo" data-nav="/home">ARTélio</h1>
+        <div class="header-icons">
+            <div class="notification-wrapper">
+                <button class="icon-btn" id="notificationBell" title="Notifications"><i class="bi bi-bell"></i></button>
+                <div class="notification-panel" id="notificationPanel">
+                    <div class="notification-panel-header">
+                        <h3>Notifications</h3>
+                        <button class="mute-all-btn" id="muteAllBtn">Silence All</button>
+                    </div>
+                    <div class="notification-list" id="notificationList">
+                        <div class="notification-item">
+                            <p>You have <%= pending.length %> submission<%= pending.length === 1 ? "" : "s" %> awaiting review.</p>
+                            <span class="notification-time">Today</span>
+                        </div>
+                        <div class="notification-item">
+                            <p>A new guestbook message was left in one of your showrooms.</p>
+                            <span class="notification-time">This week</span>
+                        </div>
+                    </div>
+                    <p class="notification-empty" id="notificationEmpty" hidden>Notifications silenced.</p>
+                    <a href="/notifications" class="view-all-link">View All</a>
+                </div>
+            </div>
+            <button class="icon-btn" data-nav="/cart-in"><i class="bi bi-bag-heart"></i></button>
+            <button class="icon-btn" title="Profile" data-nav="/my-profile"><i class="bi bi-person"></i></button>
+        </div>
+    </header>
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="/dashboard-curator/statistics" class="nav-link <%= activeSection === "statistics" ? "active" : "" %>" data-section="statistics">
+                    <i class="bi bi-graph-up"></i> Statistics
+                </a>
+                <a href="/dashboard-curator/showrooms" class="nav-link <%= activeSection === "showrooms" ? "active" : "" %>" data-section="showrooms">
+                    <i class="bi bi-collection"></i> My Showrooms
+                </a>
+                <a href="/dashboard-curator/requests" class="nav-link <%= activeSection === "requests" ? "active" : "" %>" data-section="requests">
+                    <i class="bi bi-clock-history"></i> Pending Requests <% if (pending.length > 0) { %>(<%= pending.length %>)<% } %>
+                </a>
+                <a href="/dashboard-curator/artists" class="nav-link <%= activeSection === "artists" ? "active" : "" %>" data-section="artists">
+                    <i class="bi bi-palette"></i> Featured Artists
+                </a>
+                <a href="/dashboard-curator/earnings" class="nav-link <%= activeSection === "earnings" ? "active" : "" %>" data-section="earnings">
+                    <i class="bi bi-box-seam"></i> Earnings
+                </a>
+                <a href="/settings.html" class="nav-link">
+                    <i class="bi bi-gear"></i> Settings
+                </a>
+                <a href="/logout" class="nav-link">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </a>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <section class="section <%= activeSection === "statistics" ? "active" : "" %>" id="section-statistics">
+                <h2 class="section-heading">Statistics</h2>
+                <div class="stat-grid">
+                    <div class="stat-box">
+                        <span class="stat-label">Showrooms</span>
+                        <span class="stat-number"><%= profile.showroom_count %></span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">Artworks</span>
+                        <span class="stat-number"><%= profile.artwork_count %></span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">Reviews</span>
+                        <span class="stat-number"><%= profile.rating_count %></span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">Followers</span>
+                        <span class="stat-number"><%= profile.follower_count %></span>
+                    </div>
+                </div>
+                <div class="charts-row">
+                    <div class="chart-box">
+                        <canvas id="artworksChart"></canvas>
+                        <p class="chart-label">Artworks per Showroom</p>
+                    </div>
+                </div>
+                <div class="insights-grid">
+                    <div class="insight-box">
+                        <h4 class="insight-title">Pending Requests</h4>
+                        <p class="insight-value"><%= pending.length %></p>
+                        <p class="insight-detail">Awaiting your review</p>
+                    </div>
+                    <div class="insight-box">
+                        <h4 class="insight-title">Active Showrooms</h4>
+                        <p class="insight-value"><%= activeCount %></p>
+                        <p class="insight-detail"><%= archivedCount %> archived</p>
+                    </div>
+                    <div class="insight-box">
+                        <h4 class="insight-title">Average Rating</h4>
+                        <p class="insight-value"><%= Number(profile.avg_rating).toFixed(1) %></p>
+                        <p class="insight-detail">Across your showrooms' artworks</p>
+                    </div>
+                    <div class="insight-box">
+                        <h4 class="insight-title">Featured Artists</h4>
+                        <p class="insight-value"><%= artists.length %></p>
+                        <p class="insight-detail">Artists shown in your rooms</p>
+                    </div>
+                </div>
+            </section>
+            <section class="section <%= activeSection === "showrooms" ? "active" : "" %>" id="section-showrooms">
+                <h2 class="section-heading">My Showrooms</h2>
+                <h3 class="subsection-title">Recent Showrooms</h3>
+                <div class="showrooms-list">
+                    <% if (showrooms.length === 0) { %>
+                    <p class="no-showrooms">You haven't created a showroom yet.</p>
+                    <% } %>
+                    <% showrooms.forEach(function(room) { %>
+                    <div class="showroom-item">
+                        <div class="showroom-header">
+                            <h4 class="showroom-name"><%= room.title %></h4>
+                            <span class="showroom-status <%= room.status %>"><%= room.status === "active" ? "Active" : "Archived" %></span>
+                        </div>
+                        <p class="showroom-stat"><%= room.artwork_count %> approved artwork<%= room.artwork_count == 1 ? "" : "s" %></p>
+                        <div class="showroom-actions">
+                            <a href="/single-showroom?room=<%= room.id %>">View</a>
+                            <a href="/curator/showrooms/<%= room.id %>/edit">Edit</a>
+                            <form method="POST" action="/curator/showrooms/<%= room.id %>/status" class="inline-form">
+                                <input type="hidden" name="status" value="<%= room.status === 'active' ? 'archived' : 'active' %>">
+                                <button type="submit" class="link-btn"><%= room.status === "active" ? "Archive" : "Publish" %></button>
+                            </form>
+                            <form method="POST" action="/curator/showrooms/<%= room.id %>/delete" class="inline-form" data-confirm="Delete this showroom? This can't be undone.">
+                                <button type="submit" class="link-btn danger-link">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    <% }); %>
+                </div>
+
+                <a href="/curator/showrooms/new" class="action-btn">
+                    <i class="bi bi-plus"></i> Create a Showroom
+                </a>
+            </section>
+            <section class="section <%= activeSection === "requests" ? "active" : "" %>" id="section-requests">
+                <h2 class="section-heading">Pending Requests</h2>
+
+                <div class="table-wrapper">
+                    <table class="requests-table">
+                        <thead>
+                            <tr>
+                                <th>Artist</th>
+                                <th>Artwork</th>
+                                <th>Showroom</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (pending.length === 0) { %>
+                            <tr><td colspan="5">No pending submissions right now.</td></tr>
+                            <% } %>
+                            <% pending.forEach(function(sub) { %>
+                            <tr>
+                                <td><%= sub.artist_name %></td>
+                                <td><%= sub.artwork_title %></td>
+                                <td><%= sub.room_title %></td>
+                                <td><span class="badge badge-pending">Pending</span></td>
+                                <td class="action-buttons">
+                                    <form method="POST" action="/curator/submissions/<%= sub.id %>/approve" class="inline-form">
+                                        <button type="submit" class="btn-accept">Accept</button>
+                                    </form>
+                                    <form method="POST" action="/curator/submissions/<%= sub.id %>/reject" class="inline-form">
+                                        <button type="submit" class="btn-reject">Reject</button>
+                                    </form>
+                                    <a href="/profiles?user=<%= sub.artist_id %>" class="btn-link">View Portfolio</a>
+                                </td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <section class="section <%= activeSection === "artists" ? "active" : "" %>" id="section-artists">
+                <h2 class="section-heading">Featured Artists</h2>
+                <p class="section-subtitle">Artists with approved work in your showrooms</p>
+
+                <div class="artists-cards-grid">
+                    <% if (artists.length === 0) { %>
+                    <p class="no-artists">No approved artists yet.</p>
+                    <% } %>
+                    <% artists.forEach(function(artist) { %>
+                    <div class="artist-featured-card">
+                        <div class="artist-avatar-large">
+                            <% if (artist.avatar_url) { %><img src="<%= artist.avatar_url %>" alt="<%= artist.username %>"><% } else { %><i class="bi bi-person-circle"></i><% } %>
+                        </div>
+                        <h3 class="artist-featured-name"><%= artist.username %></h3>
+                        <p class="artist-featured-specialty"><%= artist.bio || "Artist on ARTélio" %></p>
+                        <div class="artist-featured-actions">
+                            <a href="/profiles?user=<%= artist.id %>" class="artist-action-btn">View profile</a>
+                        </div>
+                    </div>
+                    <% }); %>
+                </div>
+            </section>
+
+            <section class="section <%= activeSection === "earnings" ? "active" : "" %>" id="section-earnings">
+                <h2 class="section-heading">Earnings</h2>
+                <div class="stat-grid">
+                    <div class="stat-box">
+                        <span class="stat-label">Total Commission Earned</span>
+                        <span class="stat-number">€<%= totalCommission.toFixed(2) %></span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">This Month</span>
+                        <span class="stat-number">€<%= monthlyCommission.toFixed(2) %></span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">Total Sales</span>
+                        <span class="stat-number"><%= orders.length %></span>
+                    </div>
+                </div>
+
+                <h3 class="subsection-title">Performance per Showroom</h3>
+                <div class="table-wrapper">
+                    <table class="requests-table">
+                        <thead>
+                            <tr>
+                                <th>Showroom</th>
+                                <th>Sales</th>
+                                <th>Commission Earned</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (earningsByShowroom.length === 0) { %>
+                            <tr><td colspan="3">No showrooms yet.</td></tr>
+                            <% } %>
+                            <% earningsByShowroom.forEach(function(room) { %>
+                            <tr>
+                                <td><%= room.room_title %></td>
+                                <td><%= room.sale_count %></td>
+                                <td>€<%= room.total_commission.toFixed(2) %></td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="subsection-title">Commission Transactions</h3>
+                <div class="table-wrapper">
+                    <table class="requests-table">
+                        <thead>
+                            <tr>
+                                <th>Artwork</th>
+                                <th>Sale Price</th>
+                                <th>Commission Rate</th>
+                                <th>Commission Earned</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (orders.length === 0) { %>
+                            <tr><td colspan="5">No sales yet.</td></tr>
+                            <% } %>
+                            <% orders.forEach(function(order) { %>
+                            <tr>
+                                <td><%= order.title %></td>
+                                <td>€<%= Number(order.gross_price).toFixed(2) %></td>
+                                <td><%= Number(order.commission_rate).toFixed(2) %>%</td>
+                                <td>€<%= Number(order.commission_amount).toFixed(2) %></td>
+                                <td><%= new Date(order.purchased_at).toLocaleDateString() %></td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+    <footer class="footer">
+        <p>© 2026 ARTélio. All rights reserved.</p>
+    </footer>
+    <script src="/js/vendor/page.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.getElementById('section-' + id)?.classList.add('active');
+            document.querySelector('[data-section="' + id + '"]')?.classList.add('active');
+        }
+
+        page('/dashboard-curator/:section', (ctx) => showSection(ctx.params.section));
+        page('/dashboard-curator', () => showSection('statistics'));
+        page();
+
+        const artworksCtx = document.getElementById('artworksChart')?.getContext('2d');
+        if (artworksCtx) {
+            new Chart(artworksCtx, {
+                type: 'bar',
+                data: {
+                    labels: <%- JSON.stringify(showrooms.map(s => s.title)) %>,
+                    datasets: [{
+                        data: <%- JSON.stringify(showrooms.map(s => Number(s.artwork_count))) %>,
+                        backgroundColor: ['#2E3A5F', '#6F7DAE', '#8B96B8', '#A15028'],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    plugins: { legend: { display: false } },
+                    scales: { x: { grid: { color: '#eee' } } }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARTélio - Order Confirmation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@800&family=EB+Garamond:wght@400;500&family=Gelasio:wght@400;500;600;700&family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Luxurious+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/order-confirmation.css">
+</head>
+<body>
+
+    <div class="confetti-container" id="confettiContainer"></div>
+
+    <header class="header">
+        <h1 class="logo" data-nav="/home">ARTélio</h1>
+        <button class="close-btn" data-back>
+            <span>✕</span> Close <i class="bi bi-bag-heart"></i>
+        </button>
+    </header>
+
+    <main class="background-wrapper">
+        <div class="confirmation-card">
+            <h1 class="thank-you-title">Thank you</h1>
+            <p class="confirmation-message">Your order has been made successfully !!</p>
+
+            <div class="confetti-popper">
+                <img src="/images/popper.png" alt="Confetti Popper" class="popper-image">
+            </div>
+
+            <p class="email-message">You'll receive a confirmation email with more details about your order</p>
+
+            <div class="button-group">
+                <button class="btn btn-orders" data-nav="/home">Go To Home</button>
+                <button class="btn btn-cart" data-nav="/dashboard">View My Orders</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 ARTélio. All rights reserved.</p>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script>
+        function createConfetti() {
+            const container = document.getElementById('confettiContainer');
+            const confettiPieces = 50;
+
+            for (let i = 0; i < confettiPieces; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                const randomLeft = Math.random() * 100;
+                const randomDelay = Math.random() * 0.5;
+                const randomDuration = 2 + Math.random() * 1;
+                const randomRotate = Math.random() * 360;
+                const randomSize = 5 + Math.random() * 10;
+
+                confetti.style.left = randomLeft + '%';
+                confetti.style.width = randomSize + 'px';
+                confetti.style.height = randomSize + 'px';
+                confetti.style.animation = `fall ${randomDuration}s linear ${randomDelay}s forwards`;
+                confetti.style.transform = `rotate(${randomRotate}deg)`;
+
+                const colors = ['#FFD700', '#FFA500', '#FF8C00', '#D4AF37', '#CD7F32'];
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+                container.appendChild(confetti);
+            }
+        }
+        window.addEventListener('load', createConfetti);
+    </script>
+</body>
+</html>

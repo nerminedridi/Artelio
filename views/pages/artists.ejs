@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARTélio - Artists</title>
+    <link href="https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@800&family=EB+Garamond:wght@400;500;600;700&family=Gelasio:wght@400;500;600;700&family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Luxurious+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/artists.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">ARTélio</a>
+            <nav class="nav-links">
+                <a href="/showrooms.html">Showrooms</a>
+                <a href="/curators.html">Curators</a>
+                <a href="/artists.html">Artists</a>
+                <a href="/explore.html">Explore</a>
+            </nav>
+            <div class="header-icons">
+                <button class="icon-btn" title="Search" data-nav="/search">
+                    <i class="bi bi-search"></i>
+                </button>
+                <button class="icon-btn" title="Cart" data-nav="/cart-out">
+                    <i class="bi bi-bag-heart"></i>
+                </button>
+                <% if (currentUser) { %>
+                <button class="icon-btn" title="Profile" data-nav="/dashboard"><i class="bi bi-person"></i></button>
+                <% } else { %>
+                <a href="/login" class="btn-join">Join Now</a>
+                <% } %>
+            </div>
+        </div>
+    </header>
+    <%
+      function renderStars(avg) {
+        const rounded = Math.round(avg * 2) / 2;
+        let html = "";
+        for (let i = 1; i <= 5; i++) {
+          if (rounded >= i) html += '<i class="bi bi-star-fill"></i>';
+          else if (rounded >= i - 0.5) html += '<i class="bi bi-star-half"></i>';
+          else html += '<i class="bi bi-star"></i>';
+        }
+        return html;
+      }
+    %>
+    <main>
+    <% if (featured) { %>
+    <section class="hero">
+        <div class="hero-image-wrapper">
+            <img src="<%= featured.avatar_url || '/images/profile.png' %>" alt="Artist of the Month" class="hero-bg">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <span class="hero-label">✦ Top Rated Artist</span>
+            <div class="hero-profile">
+                <div class="hero-avatar">
+                    <% if (featured.avatar_url) { %><img src="<%= featured.avatar_url %>" alt="<%= featured.username %>"><% } else { %><i class="bi bi-person-circle"></i><% } %>
+                </div>
+                <div class="hero-info">
+                    <h1 class="hero-title"><%= featured.username %></h1>
+                    <div class="hero-stars">
+                        <%- renderStars(featured.avg_rating) %>
+                        <span><%= Number(featured.avg_rating).toFixed(1) %> (<%= featured.rating_count %> review<%= featured.rating_count == 1 ? "" : "s" %>)</span>
+                    </div>
+                </div>
+            </div>
+            <p class="hero-description">
+                <%= featured.bio || "" %>
+            </p>
+            <div class="hero-meta">
+                <span><i class="bi bi-images"></i> <%= featured.artwork_count %> Artworks</span>
+            </div>
+            <a href="/profiles?user=<%= featured.id %>" class="hero-btn">View Profile <i class="bi bi-arrow-right"></i></a>
+        </div>
+    </section>
+    <% } %>
+    <div class="page-body">
+        <section class="section-block">
+            <div class="section-top">
+                <h2 class="section-title">All Artists</h2>
+            </div>
+
+            <div class="artists-grid three-col">
+                <% if (artists.length === 0) { %>
+                <p class="no-artists">No artists yet.</p>
+                <% } %>
+                <% artists.forEach(function(artist) { %>
+                <div class="artist-card">
+                    <div class="artist-cover">
+                        <img src="<%= artist.avatar_url || '/images/profile.png' %>" alt="Cover">
+                        <div class="cover-overlay"></div>
+                        <div class="artist-avatar-wrap">
+                            <div class="artist-avatar">
+                                <% if (artist.avatar_url) { %><img src="<%= artist.avatar_url %>" alt="<%= artist.username %>"><% } else { %><i class="bi bi-person-circle"></i><% } %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="artist-body">
+                        <h3 class="artist-name"><%= artist.username %></h3>
+                        <p class="artist-style"><%= artist.bio || "Artist on ARTélio" %></p>
+                        <div class="artist-rating">
+                            <%- renderStars(artist.avg_rating) %><span><%= Number(artist.avg_rating).toFixed(1) %></span>
+                        </div>
+                        <div class="artist-stats">
+                            <span><i class="bi bi-images"></i> <%= artist.artwork_count %> Artworks</span>
+                            <span><i class="bi bi-chat-quote"></i> <%= artist.rating_count %> Reviews</span>
+                        </div>
+                        <div class="artist-footer">
+                            <a href="/profiles?user=<%= artist.id %>" class="artist-arrow">View Profile <i class="bi bi-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <% }); %>
+            </div>
+        </section>
+
+    </div>
+    </main>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section footer-logo">
+                <div class="logo-footer">
+                    <span class="art">ART</span><span class="elio">élio</span>
+                </div>
+                <p class="footer-description">Human-curated art, made to be experienced. Discover masterpieces that speak to your soul.</p>
+            </div>
+
+            <div class="footer-section">
+                <h4><a href="/about.html">About Us</a></h4>
+                <ul>
+                    <li><a href="/about.html#story">Our Story</a></li>
+                    <li><a href="/about.html#mission">Our Mission</a></li>
+                    <li><a href="/about.html#vision">Our Vision</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4><a href="/help.html">Help</a></h4>
+                <ul>
+                    <li><a href="/help.html#faq">FAQ</a></li>
+                    <li><a href="/help.html#privacy">Privacy Policy</a></li>
+                    <li><a href="/help.html#terms">Terms and Conditions</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Get in Touch With Us</h4>
+                <div class="newsletter-form">
+                    <input type="email" placeholder="Enter your email address" class="email-input">
+                    <button class="subscribe-btn">Subscribe</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 ARTélio. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>

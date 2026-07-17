@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARTélio - Artist Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@800&family=EB+Garamond:wght@400;500&family=Gelasio:wght@400;500;600;700&family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Luxurious+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/dashboard-artist.css">
+</head>
+<body>
+<%
+  function timeAgo(date) {
+    const days = Math.floor((Date.now() - new Date(date).getTime()) / 86400000);
+    if (days < 1) return "today";
+    if (days === 1) return "1 day ago";
+    if (days < 7) return `${days} days ago`;
+    const weeks = Math.floor(days / 7);
+    if (weeks < 5) return weeks === 1 ? "1 week ago" : `${weeks} weeks ago`;
+    const months = Math.floor(days / 30);
+    return months <= 1 ? "1 month ago" : `${months} months ago`;
+  }
+  const statusLabel = { available: "In Stock", sold: "Sold", archived: "Archived" };
+  const submissionLabel = { pending: "In Attesa", approved: "Accettata", rejected: "Rifiutata" };
+%>
+
+    <header class="header">
+        <h1 class="logo" data-nav="/home">ARTélio</h1>
+        <div class="header-icons">
+            <div class="notification-wrapper">
+                <button class="icon-btn" id="notificationBell" title="Notifications"><i class="bi bi-bell"></i></button>
+                <div class="notification-panel" id="notificationPanel">
+                    <div class="notification-panel-header">
+                        <h3>Notifications</h3>
+                        <button class="mute-all-btn" id="muteAllBtn">Silence All</button>
+                    </div>
+                    <div class="notification-list" id="notificationList">
+                        <div class="notification-item">
+                            <p>Someone left a new comment on one of your artworks.</p>
+                            <span class="notification-time">Today</span>
+                        </div>
+                        <div class="notification-item">
+                            <p>Your revenue for this month just updated.</p>
+                            <span class="notification-time">This week</span>
+                        </div>
+                    </div>
+                    <p class="notification-empty" id="notificationEmpty" hidden>Notifications silenced.</p>
+                    <a href="/notifications" class="view-all-link">View All</a>
+                </div>
+            </div>
+            <button class="icon-btn" title="Cart" data-nav="/cart-in"><i class="bi bi-bag-heart"></i></button>
+            <button class="icon-btn" title="Profile" data-nav="/my-profile"><i class="bi bi-person"></i></button>
+        </div>
+    </header>
+    <div class="dashboard-wrapper">
+
+        <aside class="sidebar">
+            <div class="profile-frame" data-nav="/my-profile" title="View profile">
+                <img src="<%= currentUser.avatar_url || '/images/profile.png' %>" alt="Profile" class="profile-img">
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/analytics.html" class="nav-link">
+                    <i class="bi bi-bar-chart-line"></i>
+                    <span>Analytics</span>
+                </a>
+                <a href="/orders" class="nav-link">
+                    <i class="bi bi-box-seam"></i>
+                    <span>Orders</span>
+                </a>
+                <a href="/settings.html" class="nav-link">
+                    <i class="bi bi-gear"></i>
+                    <span>Settings</span>
+                </a>
+                <a href="/logout" class="nav-link">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+
+            <section class="greeting-section">
+                <div class="greeting-text">
+                    <h1 class="greeting-title">Hi <%= currentUser.username %>!</h1>
+                    <p class="greeting-subtitle">Welcome to your personal studio.</p>
+                </div>
+                <div class="greeting-image">
+                    <img src="/images/artist-logo.png" alt="Artist Palette" class="palette-img">
+                </div>
+            </section>
+
+            <section class="glance-section">
+                <h2 class="glance-title">At A Glance</h2>
+                <div class="glance-grid">
+                    <div class="glance-box">
+                        <span class="glance-number"><%= profile.artwork_count %></span>
+                        <span class="glance-label">Artworks</span>
+                    </div>
+                    <div class="glance-box">
+                        <span class="glance-number"><%= profile.rating_count %></span>
+                        <span class="glance-label">Reviews</span>
+                    </div>
+                    <div class="glance-box">
+                        <span class="glance-number"><%= profile.like_count %></span>
+                        <span class="glance-label">Likes</span>
+                    </div>
+                    <div class="glance-box">
+                        <span class="glance-number"><%= profile.follower_count %></span>
+                        <span class="glance-label">Followers</span>
+                    </div>
+                    <div class="glance-box">
+                        <span class="glance-number">€<%= Number(revenue).toFixed(2) %></span>
+                        <span class="glance-label">Earnings (this month)</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="studio-section">
+                <h2 class="studio-title">Your Studio</h2>
+
+                <a href="/upload-artwork" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i>
+                    Submit your artwork to one of our showrooms
+                </a>
+
+                <div class="artwork-grid">
+                    <% if (works.length === 0) { %>
+                    <p class="no-works">You haven't uploaded any artwork yet.</p>
+                    <% } %>
+                    <% works.forEach(function(work) { %>
+                    <div class="artwork-card">
+                        <img src="<%= work.image_url %>" alt="<%= work.title %>" class="artwork-img">
+                        <h3 class="artwork-title"><%= work.title %></h3>
+                        <div class="artwork-stats">
+                            <p><strong>Rate:</strong> <%= Number(work.avg_rating).toFixed(1) %> <i class="bi bi-star"></i></p>
+                            <p><strong>Reviews:</strong> <%= work.rating_count %></p>
+                            <p><strong>Status:</strong> <span class="status-<%= work.status === 'sold' ? 'sold' : 'stock' %>"><%= statusLabel[work.status] %> <% if (work.status === 'sold') { %><i class="bi bi-check-circle"></i><% } %></span></p>
+                        </div>
+                        <div class="submission-status-list">
+                            <% (submissionsByArtwork[work.id] || []).forEach(function(sub) { %>
+                            <p class="submission-status-item">
+                                <strong><%= sub.room_title %>:</strong>
+                                <span class="submission-status-<%= sub.status %>"><%= submissionLabel[sub.status] %></span>
+                                <% if (sub.curatorial_note) { %><br><em>"<%= sub.curatorial_note %>"</em><% } %>
+                            </p>
+                            <% }); %>
+                            <% if (!(submissionsByArtwork[work.id] || []).length) { %>
+                            <p class="submission-status-item">Not submitted to any showroom yet.</p>
+                            <% } %>
+                        </div>
+                        <div class="artwork-actions">
+                            <a href="/artwork/<%= work.id %>/edit" class="artwork-edit-link">Edit</a>
+                            <form method="POST" action="/artwork/<%= work.id %>/delete" class="inline-form" data-confirm="Delete this artwork? This can't be undone.">
+                                <button type="submit" class="artwork-delete-link">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    <% }); %>
+                </div>
+            </section>
+
+            <div class="bottom-grid">
+
+                <div class="panel">
+                    <h3 class="panel-title">Latest Activity</h3>
+                    <div class="panel-divider"></div>
+                    <div class="panel-body">
+                        <% if (activity.length === 0) { %>
+                        <p>No recent activity on your artworks yet.</p>
+                        <% } %>
+                        <% activity.forEach(function(a) { %>
+                        <p><strong>New comment on "<%= a.artwork_title %>":</strong><br>
+                        "<%= a.content %>" — @<%= a.username %> · <%= timeAgo(a.created_at) %></p>
+                        <% }); %>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h3 class="panel-title">Trending Works</h3>
+                    <div class="panel-divider"></div>
+                    <div class="panel-body">
+                        <% if (highestRated) { %>
+                        <p><strong>Highest rated:</strong><br>
+                        "<%= highestRated.title %>" : <%= Number(highestRated.avg_rating).toFixed(1) %> stars (<%= highestRated.rating_count %> reviews)</p>
+                        <% } else { %>
+                        <p>No ratings yet on your work.</p>
+                        <% } %>
+                        <p><strong>Total artworks:</strong> <%= works.length %></p>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h3 class="panel-title">Marketplace</h3>
+                    <div class="panel-divider"></div>
+                    <div class="panel-body">
+                        <p><strong>Revenue This Month:</strong> <span class="highlight">€<%= Number(revenue).toFixed(2) %></span></p>
+                        <% if (recentSale) { %>
+                        <p><strong>Recent Sale:</strong><br>
+                        "<%= recentSale.title %>" : €<%= Number(recentSale.artist_net).toFixed(2) %> · <%= timeAgo(recentSale.purchased_at) %></p>
+                        <% } %>
+                        <p><strong>Total sales:</strong> <%= totalSales %> artwork<%= totalSales === 1 ? "" : "s" %></p>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 ARTélio. All rights reserved.</p>
+    </footer>
+    <script src="/js/main.js"></script>
+</body>
+</html>

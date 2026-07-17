@@ -1,0 +1,264 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Gelasio', Georgia, serif;
+  background: linear-gradient(135deg, #6B8AC5 0%, #8B96B8 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+.confetti {
+  position: fixed;
+  pointer-events: none;
+  top: -10px;
+}
+@keyframes fall {
+  to {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+.header {
+  background: #573E2E;
+  padding: 1.25rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #3D1F11;
+  position: relative;
+  z-index: 10;
+}
+.logo {
+  font-family: 'Abhaya Libre', serif;
+  font-size: 52px;
+  font-weight: 800;
+  color: #6F7DAE;
+  margin: 0;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+.logo:hover {
+  opacity: 0.8;
+}
+.close-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #6F7DAE;
+  color: #FFFFFF;
+  font-family: 'Gelasio', serif;
+  font-weight: 600;
+  font-size: 18px;
+  border: none;
+  border-radius: 10px;
+  padding: 0.6rem 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.close-btn:hover {
+  background: #8090c0;
+  transform: translateY(-1px);
+}
+.close-btn span {
+  font-size: 20px;
+  line-height: 1;
+}
+.background-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #6B8AC5 0%, #8B96B8 100%);
+}
+.confirmation-card {
+  background: #E8EEF8;
+  border-radius: 40px;
+  padding: 3.5rem 3rem;
+  max-width: 900px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 60px #0000004d;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+.thank-you-title {
+  font-family: 'Ibarra Real Nova', serif;
+  font-size: 80px;
+  font-style: italic;
+  font-weight: 700;
+  color: #3D1F11;
+  margin: 0;
+  line-height: 1;
+}
+.confirmation-message {
+  font-family: 'Gelasio', serif;
+  font-size: 32px;
+  font-weight: 600;
+  color: #A15028;
+  margin: 0;
+  line-height: 1.2;
+}
+.confetti-popper {
+  width: 160px;
+  height: 160px;
+  margin: 1rem 0;
+  animation: popperBounce 0.6s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.popper-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px #d4af3766);
+}
+@keyframes popperBounce {
+  0% {
+    transform: scale(0.5) translateY(-20px);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+.email-message {
+  font-size: 18px;
+  color: #6B7A9F;
+  margin: 1rem 0 0 0;
+  line-height: 1.6;
+}
+.button-group {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.btn {
+  padding: 1rem 2.5rem;
+  border: none;
+  border-radius: 40px;
+  font-family: 'Gelasio', serif;
+  font-size: 24px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 280px;
+}
+.btn-orders {
+  background: #A15028;
+  color: #FFFFFF;
+  box-shadow: 0 8px 20px #a150284d;
+}
+.btn-orders:hover {
+  background: #8B4620;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px #a1502866;
+}
+.btn-orders:active {
+  transform: translateY(-1px);
+}
+.btn-cart {
+  background: #A15028;
+  color: #FFFFFF;
+  box-shadow: 0 8px 20px #a150284d;
+}
+.btn-cart:hover {
+  background: #8B4620;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px #a1502866;
+}
+.btn-cart:active {
+  transform: translateY(-1px);
+}
+.footer {
+  background: #573E2E;
+  padding: 1.5rem;
+  text-align: center;
+  border-top: 2px solid #3D1F11;
+  position: relative;
+  z-index: 10;
+}
+.footer p {
+  color: #3D1F11;
+  font-size: 14px;
+  margin: 0;
+}
+@media (max-width: 768px) {
+  .confirmation-card {
+    padding: 2rem 1.5rem;
+    border-radius: 30px;
+  }
+  .thank-you-title {
+    font-size: 56px;
+  }
+  .confirmation-message {
+    font-size: 24px;
+  }
+  .button-group {
+    gap: 1rem;
+    flex-direction: column;
+  }
+  .btn {
+    min-width: auto;
+    padding: 0.9rem 2rem;
+    font-size: 20px;
+  }
+  .confetti-popper {
+    width: 120px;
+    height: 120px;
+  }
+}
+@media (max-width: 480px) {
+  .header {
+    padding: 1rem;
+  }
+  .logo {
+    font-size: 38px;
+  }
+  .close-btn {
+    font-size: 14px;
+    padding: 0.5rem 1rem;
+  }
+  .confirmation-card {
+    padding: 1.5rem 1rem;
+  }
+  .thank-you-title {
+    font-size: 42px;
+  }
+  .confirmation-message {
+    font-size: 18px;
+  }
+  .email-message {
+    font-size: 15px;
+  }
+  .btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 16px;
+  }
+  .confetti-popper {
+    width: 100px;
+    height: 100px;
+  }
+}

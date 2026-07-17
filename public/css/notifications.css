@@ -1,0 +1,130 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Gelasio', Georgia, serif;
+  background-color: #F1E7D9;
+  color: #291004;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background: #573E2E;
+  padding: 0.85rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-family: 'Abhaya Libre', serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: #6F7DAE;
+  cursor: pointer;
+}
+
+.close-btn {
+  background: none;
+  border: 1px solid rgba(111, 125, 174, 0.4);
+  color: #6F7DAE;
+  border-radius: 999px;
+  padding: 0.5rem 1.1rem;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: background 0.2s ease;
+}
+
+.close-btn:hover {
+  background: rgba(111, 125, 174, 0.12);
+}
+
+.notifications-wrapper {
+  flex: 1;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+  width: 100%;
+}
+
+.notifications-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.notifications-title {
+  font-family: 'Abhaya Libre', serif;
+  font-size: 32px;
+  color: #412619;
+}
+
+.mute-all-btn {
+  border: none;
+  background: #E9D7C3;
+  color: #412619;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.mute-all-btn:hover {
+  background: #ddc4a3;
+}
+
+.notification-list {
+  background: #FFFFFF;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(65, 38, 25, 0.08);
+  padding: 0 1.5rem;
+}
+
+.notification-item {
+  padding: 1rem 0;
+  border-bottom: 1px solid #f0e6d8;
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+.notification-item p {
+  font-size: 15px;
+  color: #412619;
+  margin-bottom: 0.3rem;
+}
+
+.notification-time {
+  font-size: 12px;
+  color: #8B7355;
+}
+
+.notification-empty {
+  text-align: center;
+  color: #8B7355;
+  font-style: italic;
+  padding: 2rem 0;
+}
+
+.footer {
+  text-align: center;
+  padding: 1.5rem;
+  color: #8B7355;
+  font-size: 13px;
+}

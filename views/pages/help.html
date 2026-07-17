@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARTélio - Help</title>
+    <link href="https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@800&family=EB+Garamond:wght@400;500&family=Gelasio:wght@400;500;600;700&family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Luxurious+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/help.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">ARTélio</a>
+            <nav class="nav-links">
+                <a href="/showrooms.html">Showrooms</a>
+                <a href="/curators.html">Curators</a>
+                <a href="/artists.html">Artists</a>
+                <a href="/explore.html">Explore</a>
+            </nav>
+            <div class="header-icons">
+                <button class="icon-btn" title="Search" data-nav="/search">
+                    <i class="bi bi-search"></i>
+                </button>
+                <button class="icon-btn" title="Cart" data-nav="/cart-out">
+                    <i class="bi bi-bag-heart"></i>
+                </button>
+                <a href="/login" class="btn-join">Join Now</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+    <section class="help-hero">
+       <div class="hero-ornament hero-ornament-left">
+        <img src="images/help-borders.png" alt="" aria-hidden="true" />
+    </div>
+    <h1 class="hero-title">Need Help?</h1>
+    <p class="hero-subtitle">Find answers, understand our policies, or contact our team for assistance.</p>
+    <div class="hero-ornament hero-ornament-right">
+        <img src="images/help-borders.png" alt="" aria-hidden="true" />
+    </div>
+    </section>
+
+
+    <section class="tab-nav">
+        <button class="tab-btn active" data-scroll="faq">FAQ</button>
+        <button class="tab-btn" data-scroll="terms">Terms & Conditions</button>
+        <button class="tab-btn" data-scroll="privacy">Privacy Policy</button>
+        <button class="tab-btn" data-scroll="contact">Contact</button>
+    </section>
+
+    <div class="divider"></div>
+
+
+    <section class="faq-section" id="faq">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+
+        <div class="faq-categories">
+            <button class="faq-cat-btn active" data-faq-category="account">Account & Profiles</button>
+            <button class="faq-cat-btn" data-faq-category="orders">Order & Payments</button>
+            <button class="faq-cat-btn" data-faq-category="artists">Artists & Curators</button>
+            <button class="faq-cat-btn" data-faq-category="showroom">Showroom & Artwork</button>
+            <button class="faq-cat-btn" data-faq-category="technical">Technical Support</button>
+        </div>
+
+        <div class="faq-items" id="account">
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>How do I create an account?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>
+                        Creating an account is simple. Click Sign Up, provide your name, email address, and password, then verify your email to activate your account and start exploring the platform.
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Can I edit my profile later?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>
+                        Yes. You can update your profile information, profile picture, bio, and account preferences at any time through the Settings page.
+                    </p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>How do I reset my password?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>If you've forgotten your password, click Forgot Password on the login page and follow the instructions sent to your email address to create a new password.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="faq-items" id="orders" hidden>
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>What payment methods are accepted?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>We accept major credit and debit cards, as well as other secure payment methods available in your region. Available options will be displayed during checkout.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Can I cancel an order?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Orders may be canceled before they have been processed or shipped. Once an order enters fulfillment, cancellation may no longer be possible. Please contact support as soon as possible for assistance.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>How long does shipping take?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Shipping times vary depending on the artwork's location, shipping method, and destination. Estimated delivery information will be provided during checkout and in your order details.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-items" id="artists" hidden>
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>How can I become an artist on the platform?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>You can apply for an artist account by completing the artist application form and submitting the required portfolio information. Applications are reviewed to ensure quality and authenticity.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>How are artworks verified?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Artworks submitted to the platform undergo a review process that may include checking artwork details, ownership information, and content compliance with platform guidelines.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Can curators create exhibitions?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Yes. Curators can create and manage virtual exhibitions, organize artworks into themed collections, and design immersive showroom experiences for visitors.></p>
+                </div>
+            </div>
+        </div>
+        <div class="faq-items" id="showroom" hidden>
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>How do virtual showrooms work?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Virtual showrooms are digital exhibition spaces where visitors can explore curated collections of artworks, learn about artists, and experience exhibitions from anywhere.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Can I save artworks to my wishlist?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Yes. By clicking the heart icon on an artwork, you can save it to your wishlist for easy access and future viewing.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Are artworks original?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Artists are responsible for ensuring the originality and authenticity of their submitted works. The platform reviews submissions and reserves the right to remove content that violates intellectual property policies.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-items" id="technical" hidden>
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>The website is not loading correctly.</span>
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Try refreshing the page, clearing your browser cache, or using a different browser. If the issue persists, please contact support and provide details about your device and browser.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>I cannot upload artwork.</span>
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Ensure your file meets the supported format and size requirements. Check your internet connection and try again. If the problem continues, contact support for further assistance.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Why is my payment failing?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Payment failures can occur due to insufficient funds, incorrect billing information, bank restrictions, or temporary payment service issues. Verify your payment details and try again, or contact your payment provider for more information.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="terms-section" id="terms">
+        <div class="terms-container">
+            <h2 class="terms-title">Terms & Conditions</h2>
+            
+            <div class="terms-subsections">
+                <button class="terms-btn active" data-terms="user-resp">User Responsibilities</button>
+                <button class="terms-btn" data-terms="purchases">Purchases & Payments</button>
+                <button class="terms-btn" data-terms="intellectual">Intellectual Property</button>
+                <button class="terms-btn" data-terms="platform">Platform Usage</button>
+                <button class="terms-btn" data-terms="suspension">Account Suspension</button>
+            </div>
+
+            <div class="terms-content" id="user-resp">
+                <p>Users must provide accurate information and respect community guidelines.</p>
+            </div>
+
+            <div class="terms-content" id="purchases" hidden>
+                <p>All purchases are processed securely. Prices and availability may change.</p>
+            </div>
+
+            <div class="terms-content" id="intellectual" hidden>
+                <p>Artists retain ownership of their artworks and content.</p>
+            </div>
+
+            <div class="terms-content" id="platform" hidden>
+                <p>Users may not misuse, copy, or exploit platform content.</p>
+            </div>
+
+            <div class="terms-content" id="suspension" hidden>
+                <p>Accounts violating policies may be suspended or removed.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="privacy-section" id="privacy">
+        <h2 class="section-title">Privacy Policy</h2>
+        <p class="privacy-intro">Your privacy and data protection matter to us.<br>This policy explains how we collect, use, and protect your personal information while using our platform.</p>
+
+        <div class="privacy-grid">
+            <div class="privacy-card">
+                <h3>1. Information We Collect:</h3>
+                <p>We collect basic account information such as your name, email address, profile image, and activity on the platform. This helps us personalize your experience and connect you with other artists, curators, and collectors.</p>
+            </div>
+
+            <div class="privacy-card">
+                <h3>2. How We Use Your Data:</h3>
+                <p>Your information is used to manage accounts, process purchases, improve platform performance, and provide personalization. We analyze user behavior to enhance your experience and platform functionality.</p>
+            </div>
+
+            <div class="privacy-card">
+                <h3>3. Cookies & Analytics:</h3>
+                <p>Cookies help us remember preferences, maintain login sessions, and analyze website traffic. These tools allow us to improve navigation, optimize platform user experience, and create a better browsing experience.</p>
+            </div>
+
+            <div class="privacy-card">
+                <h3>4. Security & Protection:</h3>
+                <p>We apply security measures such as encrypted connections and secure payment systems to help protect your information. Access to personal data is restricted and monitored to maintain platform security.</p>
+            </div>
+
+            <div class="privacy-card">
+                <h3>5. Third-Party Services:</h3>
+                <p>Certain services, including payment processing and analytics, may involve trusted third-party partners. These partners are obligated to keep your information confidential and use it only to perform their functions.</p>
+            </div>
+
+            <div class="privacy-card">
+                <h3>6. User Rights & Control:</h3>
+                <p>Users may update account information, request data removal, or contact support regarding transparency and give users greater control over their personal information.</p>
+            </div>
+        </div>
+
+        <p class="privacy-footer">This Privacy Policy may be updated periodically to reflect platform improvements or legal requirements. Users will be notified of significant changes when necessary.</p>
+    </section>
+
+    <section class="contact-section" id="contact">
+        <h2 class="section-title">Contact Support</h2>
+
+        <div class="contact-container">
+            <div class="contact-info">
+                <h3>Need Assistance?</h3>
+                <p>Our team is here to help and answer any question you might have.</p>
+                <ul class="contact-details">
+                    <li><strong>Response time:</strong> 24 hours</li>
+                    <li><strong>Technical support available</strong></li>
+                    <li><strong>Suggestions and feedback welcome</strong></li>
+                    <li><strong>Secure and confidential assistance</strong></li>
+                </ul>
+            </div>
+
+            <div class="contact-form-container">
+                <form class="contact-form" id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name:</label>
+                            <input type="text" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address:</label>
+                            <input type="email" placeholder="Enter your email" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Subject:</label>
+                        <div class="dropdown-container">
+                            <button type="button" class="dropdown-btn" id="subjectDropdownBtn">
+                                <span id="selectedSubject">-- Select a subject --</span>
+                                <i class="bi bi-chevron-down"></i>
+                            </button>
+                            <div class="dropdown-menu" id="subjectDropdown">
+                                <a href="#" data-subject="Account Issue">Account Issue</a>
+                                <a href="#" data-subject="Payment Issue">Payment Issue</a>
+                                <a href="#" data-subject="Artwork Question">Artwork Question</a>
+                                <a href="#" data-subject="Technical Problem">Technical Problem</a>
+                                <a href="#" data-subject="General Inquiry">General Inquiry</a>
+                    
+                            </div>
+                            <input type="hidden" id="subjectInput" name="subject" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Message:</label>
+                        <textarea placeholder="Describe your issue or inquiry..." rows="5" required></textarea>
+                    </div>
+
+                    <div class="form-group file-upload">
+                        <label>Attach Screenshot (Optional)</label>
+                        <input type="file" id="fileInput" accept="image/*">
+                    </div>
+
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    </main>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section footer-logo">
+                <div class="logo-footer">
+                    <span class="art">ART</span><span class="elio">élio</span>
+                </div>
+                <p class="footer-description">Human-curated art, made to be experienced. Discover masterpieces that speak to your soul.</p>
+            </div>
+
+            <div class="footer-section">
+                <h4><a href="/about.html">About Us</a></h4>
+                <ul>
+                    <li><a href="/about.html#story">Our Story</a></li>
+                    <li><a href="/about.html#mission">Our Mission</a></li>
+                    <li><a href="/about.html#vision">Our Vision</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4><a href="/help.html">Help</a></h4>
+                <ul>
+                    <li><a href="/help.html#faq">FAQ</a></li>
+                    <li><a href="/help.html#privacy">Privacy Policy</a></li>
+                    <li><a href="/help.html#terms">Terms and Conditions</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Get in Touch With Us</h4>
+                <div class="newsletter-form">
+                    <input type="email" placeholder="Enter your email address" class="email-input">
+                    <button class="subscribe-btn">Subscribe</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 ARTélio. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script>
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function toggleFaqCategory(btn, categoryId) {
+            document.querySelectorAll('.faq-items').forEach(item => {
+                item.hidden = true;
+            });
+            document.querySelectorAll('.faq-cat-btn').forEach(b => {
+                b.classList.remove('active');
+            });
+
+            document.getElementById(categoryId).hidden = false;
+
+            btn.classList.add('active');
+        }
+
+        function toggleFaqAnswer(btn) {
+            const answer = btn.nextElementSibling;
+            btn.classList.toggle('active');
+            answer.classList.toggle('open');
+        }
+        function toggleTermsContent(btn, contentId) {
+            document.querySelectorAll('.terms-content').forEach(content => {
+                content.hidden = true;
+            });
+            document.querySelectorAll('.terms-btn').forEach(b => {
+                b.classList.remove('active');
+            });
+            document.getElementById(contentId).hidden = false;
+            btn.classList.add('active');
+        }
+
+        function toggleSubjectDropdown() {
+            const dropdown = document.getElementById('subjectDropdown');
+            dropdown.classList.toggle('open');
+        }
+
+        function selectSubject(e, subject) {
+            e.preventDefault();
+            document.getElementById('selectedSubject').textContent = subject;
+            document.getElementById('subjectInput').value = subject;
+            document.getElementById('subjectDropdown').classList.remove('open');
+        }
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('subjectDropdown');
+            if (!e.target.closest('.dropdown-container')) {
+                dropdown.classList.remove('open');
+            }
+        });
+
+        document.querySelectorAll('[data-scroll]').forEach((btn) => {
+            btn.addEventListener('click', () => scrollToSection(btn.dataset.scroll));
+        });
+        document.querySelectorAll('[data-faq-category]').forEach((btn) => {
+            btn.addEventListener('click', () => toggleFaqCategory(btn, btn.dataset.faqCategory));
+        });
+        document.querySelectorAll('.faq-question').forEach((btn) => {
+            btn.addEventListener('click', () => toggleFaqAnswer(btn));
+        });
+        document.querySelectorAll('[data-terms]').forEach((btn) => {
+            btn.addEventListener('click', () => toggleTermsContent(btn, btn.dataset.terms));
+        });
+        document.getElementById('subjectDropdownBtn').addEventListener('click', toggleSubjectDropdown);
+        document.querySelectorAll('[data-subject]').forEach((link) => {
+            link.addEventListener('click', (e) => selectSubject(e, link.dataset.subject));
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARTélio - Settings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@800&family=EB+Garamond:wght@400;500;600;700&family=Gelasio:wght@400;500;600;700&family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Luxurious+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/settings.css">
+</head>
+<body>
+
+    <header class="header">
+        <h1 class="logo" data-nav="/home">ARTélio</h1>
+        <div class="header-icons">
+            <button class="icon-btn"><i class="bi bi-bell"></i></button>
+            <button class="icon-btn"><i class="bi bi-bag-heart"></i></button>
+            <button class="icon-btn"><i class="bi bi-person"></i></button>
+            <button class="close-btn" data-nav="/dashboard">
+                <i class="bi bi-x-lg"></i> Close
+            </button>
+        </div>
+    </header>
+
+    <div class="page-title-bar">
+        <h1 class="page-title">SETTINGS</h1>
+    </div>
+    <div class="settings-wrapper">
+
+        <aside class="settings-menu">
+            <nav>
+                <a href="#" class="menu-link active" data-settings="profile">
+                    <i class="bi bi-person"></i> Profile
+                </a>
+                <a href="#" class="menu-link" data-settings="account">
+                    <i class="bi bi-person-gear"></i> Account
+                </a>
+                <a href="#" class="menu-link" data-settings="notifications">
+                    <i class="bi bi-bell"></i> Notifications
+                </a>
+                <a href="#" class="menu-link" data-settings="privacy">
+                    <i class="bi bi-shield-check"></i> Privacy & Safety
+                </a>
+                <a href="#" class="menu-link" data-settings="security">
+                    <i class="bi bi-lock"></i> Security
+                </a>
+                <a href="#" class="menu-link" data-settings="preferences">
+                    <i class="bi bi-sliders"></i> Preferences
+                </a>
+                <% if (currentUser.role === "artist") { %>
+                <a href="#" class="menu-link role-link visible" data-settings="artist">
+                    <i class="bi bi-palette"></i> Artist Settings
+                    <span class="role-badge">Artist</span>
+                </a>
+                <% } %>
+                <% if (currentUser.role === "curator") { %>
+                <a href="#" class="menu-link role-link visible" data-settings="curator">
+                    <i class="bi bi-collection"></i> Curator Settings
+                    <span class="role-badge">Curator</span>
+                </a>
+                <% } %>
+            </nav>
+        </aside>
+
+        <main class="settings-content">
+
+            
+            <section class="settings-section active" id="settings-profile">
+                <h2 class="section-title">Profile Information</h2>
+
+                <div class="form-group avatar-group">
+                    <label class="form-label">Profile Picture</label>
+                    <div class="avatar-row">
+                        <div class="avatar-preview" id="avatarPreview">
+                            <i class="bi bi-person-circle"></i>
+                        </div>
+                        <button class="upload-btn" id="uploadAvatarBtn">
+                            <i class="bi bi-upload"></i> Upload
+                        </button>
+                        <input type="file" id="avatarInput" accept="image/*" class="hidden-input">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-input" placeholder="Your full name">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-input" placeholder="@username">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Bio</label>
+                    <textarea class="form-textarea" rows="4" placeholder="Tell us about yourself..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Location</label>
+                    <input type="text" class="form-input" placeholder="City, Country">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Website / Portfolio</label>
+                    <input type="url" class="form-input" placeholder="https://yourwebsite.com">
+                </div>
+
+                <button class="save-btn">Save Changes</button>
+            </section>
+
+            <section class="settings-section" id="settings-account">
+                <h2 class="section-title">Account</h2>
+
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-input" placeholder="your@email.com">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" class="form-input" placeholder="+1 234 567 890">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Language</label>
+                    <select class="form-select">
+                        <option>English</option>
+                        <option>French</option>
+                        <option>Italian</option>
+                        <option>Spanish</option>
+                        <option>Arabic</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Time Zone</label>
+                    <select class="form-select">
+                        <option>UTC+0 — London</option>
+                        <option>UTC+1 — Paris, Rome</option>
+                        <option>UTC+2 — Cairo</option>
+                        <option>UTC-5 — New York</option>
+                        <option>UTC-8 — Los Angeles</option>
+                    </select>
+                </div>
+
+                <button class="save-btn">Save</button>
+            </section>
+
+            <section class="settings-section" id="settings-notifications">
+                <h2 class="section-title">Notifications</h2>
+
+                <div class="toggle-list">
+                    <div class="toggle-item">
+                        <label class="toggle-label">Email Notifications</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="toggle-item">
+                        <label class="toggle-label">New Followers</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="toggle-item">
+                        <label class="toggle-label">Artwork Likes</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="toggle-item">
+                        <label class="toggle-label">Comments</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="toggle-item">
+                        <label class="toggle-label">Showroom Updates</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="toggle-item">
+                        <label class="toggle-label">New Exhibitions</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <button class="save-btn">Save</button>
+            </section>
+
+            <section class="settings-section" id="settings-privacy">
+                <h2 class="section-title">Privacy & Safety</h2>
+
+                <div class="form-group">
+                    <label class="form-label">Profile Visibility</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="visibility" value="public" checked>
+                            <span>Public</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="visibility" value="private">
+                            <span>Private</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="toggle-list">
+                    <div class="toggle-item">
+                        <label class="toggle-label">Show Online Status</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="toggle-item">
+                        <label class="toggle-label">Allow Direct Messages</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="toggle-item">
+                        <label class="toggle-label">Show Saved Collections</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <button class="save-btn">Save</button>
+            </section>
+
+            <section class="settings-section" id="settings-security">
+                <h2 class="section-title">Security</h2>
+
+                <h3 class="sub-title">Change Password</h3>
+                <div class="form-group">
+                    <label class="form-label">Current Password</label>
+                    <input type="password" class="form-input" placeholder="••••••••">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">New Password</label>
+                    <input type="password" class="form-input" placeholder="••••••••">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" class="form-input" placeholder="••••••••">
+                </div>
+
+                <div class="security-block">
+                    <h3 class="sub-title">Two-Factor Authentication</h3>
+                    <p class="sub-desc">Add an extra layer of security to your account.</p>
+                    <button class="outline-btn">Enable</button>
+                </div>
+
+                <div class="security-block">
+                    <h3 class="sub-title">Active Sessions</h3>
+                    <p class="sub-desc">See all devices currently logged into your account.</p>
+                    <button class="outline-btn">View Devices</button>
+                </div>
+
+                <button class="save-btn">Save</button>
+            </section>
+
+            <section class="settings-section" id="settings-preferences">
+                <h2 class="section-title">Preferences</h2>
+
+                <div class="form-group">
+                    <label class="form-label">Favorite Art Categories</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-option"><input type="checkbox"> Digital Art</label>
+                        <label class="checkbox-option"><input type="checkbox"> Surrealism</label>
+                        <label class="checkbox-option"><input type="checkbox"> Photography</label>
+                        <label class="checkbox-option"><input type="checkbox"> Abstract</label>
+                        <label class="checkbox-option"><input type="checkbox"> Mixed Media</label>
+                        <label class="checkbox-option"><input type="checkbox"> Contemporary</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Favorite Styles</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-option"><input type="checkbox"> Realism</label>
+                        <label class="checkbox-option"><input type="checkbox"> Impressionism</label>
+                        <label class="checkbox-option"><input type="checkbox"> Minimalism</label>
+                        <label class="checkbox-option"><input type="checkbox"> Expressionism</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Preferred Currency</label>
+                    <select class="form-select">
+                        <option>€ Euro</option>
+                        <option>$ US Dollar</option>
+                        <option>£ British Pound</option>
+                        <option>¥ Japanese Yen</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Content Language</label>
+                    <select class="form-select">
+                        <option>English</option>
+                        <option>French</option>
+                        <option>Italian</option>
+                        <option>Spanish</option>
+                    </select>
+                </div>
+
+                <button class="save-btn">Save</button>
+            </section>
+
+            <section class="settings-section" id="settings-artist">
+                <h2 class="section-title">Artist Settings</h2>
+
+                <div class="form-group">
+                    <label class="form-label">Portfolio Visibility</label>
+                    <select class="form-select">
+                        <option>Public</option>
+                        <option>Followers Only</option>
+                        <option>Private</option>
+                    </select>
+                </div>
+
+                <div class="toggle-item">
+                    <label class="toggle-label">Commission Requests</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="toggle-item mt-md">
+                    <label class="toggle-label">Artwork Watermark</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="form-group mt-lg">
+                    <label class="form-label">Default Artwork License</label>
+                    <select class="form-select">
+                        <option>All Rights Reserved</option>
+                        <option>Creative Commons CC BY</option>
+                        <option>Creative Commons CC BY-NC</option>
+                        <option>Public Domain</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Social Media Links</label>
+                    <input type="url" class="form-input" placeholder="Instagram URL">
+                    <input type="url" class="form-input mt-sm" placeholder="Behance URL">
+                    <input type="url" class="form-input mt-sm" placeholder="Twitter / X URL">
+                </div>
+
+                <button class="save-btn">Save</button>
+            </section>
+
+            <section class="settings-section" id="settings-curator">
+                <h2 class="section-title">Curator Settings</h2>
+
+                <div class="form-group">
+                    <label class="form-label">Showroom Visibility</label>
+                    <select class="form-select">
+                        <option>Public</option>
+                        <option>Private</option>
+                        <option>Invite Only</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Submission Approval Method</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="approval" value="auto"> <span>Automatic</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="approval" value="manual" checked> <span>Manual Review</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="toggle-item">
+                    <label class="toggle-label">Guestbook Moderation</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="form-group mt-lg">
+                    <label class="form-label">Artist Invitation Settings</label>
+                    <select class="form-select">
+                        <option>Anyone Can Apply</option>
+                        <option>Invite Only</option>
+                        <option>Closed</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Featured Artwork Rules</label>
+                    <textarea class="form-textarea" rows="3" placeholder="Describe your curation rules..."></textarea>
+                </div>
+
+                <button class="save-btn">Save</button>
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 ARTélio. All rights reserved.</p>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script>
+        function showSettings(id, link) {
+            document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-link').forEach(l => l.classList.remove('active'));
+            document.getElementById('settings-' + id).classList.add('active');
+            link.classList.add('active');
+        }
+
+        function previewAvatar(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const preview = document.getElementById('avatarPreview');
+                preview.innerHTML = `<img src="${e.target.result}" alt="Avatar">`;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        document.querySelectorAll('[data-settings]').forEach((link) => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                showSettings(link.dataset.settings, link);
+            });
+        });
+        document.getElementById('uploadAvatarBtn').addEventListener('click', () => {
+            document.getElementById('avatarInput').click();
+        });
+        document.getElementById('avatarInput').addEventListener('change', previewAvatar);
+    </script>
+</body>
+</html>

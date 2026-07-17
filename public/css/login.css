@@ -1,0 +1,390 @@
+@import url('https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@800&family=Gelasio:wght@400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Gelasio', Georgia, serif;
+  min-height: 100vh;
+  background-image: url('/images/login-bg.png');
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.login-content {
+  max-width: 800px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+
+
+.login-logo {
+  margin: 0;
+  line-height: 0.85;
+}
+
+.logo-art {
+  font-family: 'EB Garamond', serif;
+  font-size: 160px;
+  line-height: 0.85;
+  display: inline-block;
+  position: relative;
+  color: #909FD7;
+  font-weight:300;
+}
+
+.logo-elio {
+  font-family: 'Luxurious Script', cursive;
+  font-size: 190px;
+  line-height: 0.85;
+  display: inline-block;
+  position: relative;
+  color: #909FD7;
+  transform: translate(-56px, -0.7px);
+  transform-origin: left center;
+  font-weight:300;
+}
+
+.login-tagline {
+  margin-top: -0.5rem; 
+}
+
+.login-subtitle {
+  margin-top: -0.75rem; 
+}
+.login-tagline {
+  font-family: 'Ibarra Real Nova', serif;
+  font-weight: 600;
+  font-style: italic;
+  font-size: 52px;
+  color: #FFFFFF;
+  margin: 0;
+  white-space: nowrap;
+  margin-top: -0.5rem;
+  text-shadow: 0 4px 12px #0000004d;
+  line-height: 1.2;
+}
+
+.login-subtitle {
+  font-family: 'Ibarra Real Nova', serif;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 42px;
+  color: #ffffff80;
+  margin: 0;
+  text-shadow: 0 4px 12px #0000004d;
+  line-height: 1.4;
+  white-space: nowrap;
+  margin-top: -0.9rem; 
+  max-width: unset;
+}
+
+.login-box {
+  width: 700px;
+  background: #573e2e80;
+  backdrop-filter: blur(24px);
+  border-radius: 50px;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 1.5rem;
+  border: 1px solid #3129291a;
+}
+
+.login-title {
+  font-family: 'Gelasio', Georgia, serif;
+  font-weight: 400;
+  font-size: 40px;
+  color: #291004;
+  margin: 0 0 0.5rem 0;
+  text-align:center;
+}
+
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  flex: 1;
+}
+
+.password-field {
+  position: relative;
+  width: 100%;
+}
+
+.password-field .login-input {
+  padding-right: 3.25rem;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 1.25rem;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #ffffffbf;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-input {
+  width: 100%;
+  height: 60px;
+  background: #6f7dae80;
+  backdrop-filter: blur(16px);
+  border: 1px solid #6f7dae4d;
+  border-radius: 100px;
+  padding: 0 1.5rem;
+  font-family: 'Gelasio', Georgia, serif;
+  font-weight: 400;
+  font-size: 20px;
+  color: #ffffffbf;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.login-input::placeholder {
+  color: #ffffffbf;
+}
+
+.login-input:focus {
+  background: #6f7daea6;
+  border-color: #6f7dae80;
+  box-shadow: 0 0 0 3px #6f7dae33;
+}
+
+
+.forgot-password-container {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 0;
+}
+
+.forgot-password {
+  font-family: 'Gelasio', Georgia, serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: #1C0A01;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+.forgot-password:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+
+.login-button {
+  width: 200px;
+  height: 50px;
+  margin: 0.5rem auto 0;
+  background: #291004bf;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Gelasio', Georgia, serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: #FFFFFF;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px #00000033;
+}
+
+.login-button:hover {
+  background: #291004e6;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px #0000004d;
+}
+
+.login-button:active {
+  transform: translateY(0);
+}
+
+
+.remember-me-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-right: 0;
+  justify-content: flex-start;
+}
+
+.remember-checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #6F7DAE;
+}
+
+.remember-label {
+  font-family: 'Gelasio', Georgia, serif;
+  font-weight: 400;
+  font-size: 20px;
+  color: #FFFFFF;
+  cursor: pointer;
+  text-shadow: 0 2px 4px #0000004d;
+  user-select: none;
+}
+
+.signup-text {
+  font-family: 'Gelasio', Georgia, serif;
+  font-weight: 400;
+  font-size: 20px;
+  color: #FFFFFF;
+  margin: 0;
+  text-shadow: 0 2px 4px #0000004d;
+  text-align: center;
+}
+
+.signup-link {
+  color: #FFFFFF;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-shadow: 0 2px 4px #0000004d;
+  border-bottom: 2px solid #FFFFFF;
+}
+
+.signup-link:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+@media (max-width: 768px) {
+  .login-box {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    padding: 2rem;
+    gap: 1rem;
+  }
+
+  .login-logo {
+    font-size: 56px;
+  }
+
+  .login-tagline {
+    font-size: 48px;
+  }
+
+  .login-subtitle {
+    font-size: 28px;
+  }
+
+  .login-title {
+    font-size: 32px;
+  }
+
+  .login-input {
+    height: 50px;
+    font-size: 18px;
+  }
+
+  .login-button {
+    width: 160px;
+    height: 45px;
+    font-size: 16px;
+  }
+
+  .remember-label,
+  .signup-text {
+    font-size: 18px;
+  }
+
+  .forgot-password {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 1rem;
+  }
+
+  .login-content {
+    gap: 1.5rem;
+  }
+
+  .login-box {
+    width: 100%;
+    padding: 1.5rem;
+    height: auto;
+    border-radius: 30px;
+    gap: 0.75rem;
+  }
+
+  .login-logo {
+    font-size: 48px;
+  }
+
+  .login-tagline {
+    font-size: 36px;
+  }
+
+  .login-subtitle {
+    font-size: 22px;
+  }
+
+  .login-title {
+    font-size: 28px;
+  }
+
+  .login-input {
+    height: 45px;
+    font-size: 16px;
+    padding: 0 1rem;
+  }
+
+  .login-button {
+    width: 140px;
+    height: 40px;
+    font-size: 14px;
+  }
+
+  .remember-checkbox {
+    width: 18px;
+    height: 18px;
+  }
+
+  .remember-label,
+  .signup-text {
+    font-size: 16px;
+  }
+
+  .forgot-password {
+    font-size: 14px;
+  }
+}

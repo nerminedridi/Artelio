@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARTélio - <%= artwork.title %></title>
+    <link href="https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@800&family=EB+Garamond:wght@400;500;600;700&family=Gelasio:wght@400;500;600;700&family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Luxurious+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/artwork-details.css">
+</head>
+<body>
+<%
+  const styleTags = artwork.style_tags || [];
+  const category = styleTags[0] ? styleTags[0][0].toUpperCase() + styleTags[0].slice(1) : "Uncategorized";
+  const style = styleTags[1] ? styleTags[1][0].toUpperCase() + styleTags[1].slice(1) : category;
+  const tagsLine = styleTags.length
+    ? styleTags.map((t) => t[0].toUpperCase() + t.slice(1)).join(" . ")
+    : "—";
+  const createdLabel = new Date(artwork.created_at).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+  const statusLabel = artwork.status === "available" ? "In Stock" : artwork.status === "sold" ? "Sold" : "Archived";
+  const statusClass = artwork.status === "available" ? "in-stock" : "sold-out";
+%>
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">ARTélio</a>
+            <nav class="nav-links">
+                <a href="/showrooms.html">Showrooms</a>
+                <a href="/curators.html">Curators</a>
+                <a href="/artists.html">Artists</a>
+                <a href="/explore.html">Explore</a>
+            </nav>
+            <div class="header-icons">
+                <button class="icon-btn" title="Search" data-nav="/search">
+                    <i class="bi bi-search"></i>
+                </button>
+                <button class="icon-btn" title="Cart" data-nav="/cart-out">
+                    <i class="bi bi-bag-heart"></i>
+                </button>
+                <% if (currentUser) { %>
+                <button class="icon-btn" title="Profile" data-nav="/dashboard"><i class="bi bi-person"></i></button>
+                <% } else { %>
+                <a href="/login" class="btn-join">Join Now</a>
+                <% } %>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-wrapper">
+        <button class="go-back" data-back>
+            <i class="bi bi-arrow-left"></i> Go back
+        </button>
+        <div class="artwork-card">
+            <div class="artwork-main">
+                <img src="<%= artwork.image_url %>" alt="<%= artwork.title %>" class="artwork-image">
+
+                <div class="artwork-info">
+                    <h1 class="artwork-title"><%= artwork.title %></h1>
+                    <p class="artwork-artist">By <%= artwork.artist_name %></p>
+                    <% if (artwork.showroom_title) { %>
+                    <p class="artwork-showroom">Showroom: <span><%= artwork.showroom_title %></span></p>
+                    <% } %>
+
+                    <p class="artwork-description">
+                        <%= artwork.description %>
+                    </p>
+
+                    <p class="artwork-rating">&#9733; <%= Number(artwork.avg_rating).toFixed(1) %> (based on <%= artwork.rating_count %> review<%= artwork.rating_count == 1 ? "" : "s" %>)</p>
+
+                    <p class="artwork-price">Price: €<%= Number(artwork.price).toFixed(2) %></p>
+                    <p class="artwork-status">Status: <span class="<%= statusClass %>"><%= statusLabel %></span></p>
+
+                    <div class="artwork-actions">
+                        <% const isOwnArtwork = currentUser && currentUser.id === artwork.artist_id; %>
+                        <% if (!currentUser) { %>
+                        <button class="btn-cart" data-nav="/login">
+                            <i class="bi bi-bag-heart"></i> Log in to purchase
+                        </button>
+                        <% } else if (isOwnArtwork) { %>
+                        <button class="btn-cart" disabled>
+                            <i class="bi bi-bag-heart"></i> This is your artwork
+                        </button>
+                        <% } else { %>
+                        <button class="btn-cart" id="addToCartBtn" data-artwork-id="<%= artwork.id %>" <%= artwork.status === "available" ? "" : "disabled" %>>
+                            <i class="bi bi-bag-heart"></i> <%= artwork.status === "available" ? "Add To Cart" : statusLabel %>
+                        </button>
+                        <% } %>
+                        <span class="or-text">or</span>
+                        <button class="btn-wishlist" id="saveBtn" data-artwork-id="<%= artwork.id %>" <%= currentUser ? "" : "disabled" %>>
+                            <i class="bi bi-heart"></i> Save to Wishlist
+                        </button>
+                        <% if (currentUser && !isOwnArtwork) { %>
+                        <button class="btn-report report-btn" data-report-type="artwork" data-report-id="<%= artwork.id %>" data-report-toggle="reportBox-artwork-<%= artwork.id %>">
+                            <i class="bi bi-flag"></i> Report
+                        </button>
+                        <% } %>
+                    </div>
+                    <p class="form-error" id="cartMessage"></p>
+                    <% if (currentUser && !isOwnArtwork) { %>
+                    <div class="report-box hidden" id="reportBox-artwork-<%= artwork.id %>">
+                        <textarea class="report-reason" placeholder="Describe the issue with this artwork..."></textarea>
+                        <button class="report-submit" data-report-type="artwork" data-report-id="<%= artwork.id %>">Submit Report</button>
+                        <span class="report-status"></span>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <div class="details-card">
+            <section class="details-section">
+                <h2 class="section-title">Artwork Details</h2>
+                <table class="details-table">
+                    <tr>
+                        <td class="detail-label">Category</td>
+                        <td class="detail-value"><%= category %></td>
+                    </tr>
+                    <tr>
+                        <td class="detail-label">Style</td>
+                        <td class="detail-value"><%= style %></td>
+                    </tr>
+                    <tr>
+                        <td class="detail-label">Medium</td>
+                        <td class="detail-value"><%= artwork.medium || "—" %></td>
+                    </tr>
+                    <tr>
+                        <td class="detail-label">Dimensions</td>
+                        <td class="detail-value"><%= artwork.dimensions || "—" %></td>
+                    </tr>
+                    <tr>
+                        <td class="detail-label">Created</td>
+                        <td class="detail-value"><%= createdLabel %></td>
+                    </tr>
+                    <tr>
+                        <td class="detail-label">Availability</td>
+                        <td class="detail-value"><%= statusLabel %></td>
+                    </tr>
+                    <tr>
+                        <td class="detail-label">Tags</td>
+                        <td class="detail-value"><%= tagsLine %></td>
+                    </tr>
+                </table>
+            </section>
+            <section class="feedback-section">
+                <h2 class="section-title">Community Feedback</h2>
+
+                <% if (!currentUser) { %>
+                <p class="no-comments">Log in to leave a review.</p>
+                <% } else if (isOwnArtwork) { %>
+                <p class="no-comments">You can't review your own artwork.</p>
+                <% } else { %>
+                <div class="review-form-box">
+                    <div class="review-form-left">
+                        <p class="review-label">Leave a review:</p>
+                        <div class="star-rating" id="starRating">
+                            <span class="review-label">Rating:</span>
+                            <div class="stars">
+                                <i class="bi bi-star star" data-value="1"></i>
+                                <i class="bi bi-star star" data-value="2"></i>
+                                <i class="bi bi-star star" data-value="3"></i>
+                                <i class="bi bi-star star" data-value="4"></i>
+                                <i class="bi bi-star star" data-value="5"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="review-form-right">
+                        <input type="text" class="review-input" id="reviewComment" placeholder="Write your comment....">
+                        <button class="submit-review-btn" id="submitReviewBtn" data-artwork-id="<%= artwork.id %>">Submit Review</button>
+                        <p class="form-error" id="reviewMessage"></p>
+                    </div>
+                </div>
+                <% } %>
+
+                <hr class="feedback-divider">
+                <div class="comments-list">
+                    <% if (comments.length === 0) { %>
+                    <p class="no-comments">No comments yet — be the first to share your thoughts.</p>
+                    <% } %>
+                    <% comments.forEach(function(comment) { %>
+                    <div class="comment">
+                        <p class="comment-author">@<%= comment.username %></p>
+                        <p class="comment-text">"<%= comment.content %>"</p>
+                        <% if (currentUser && (currentUser.id === comment.user_id || currentUser.role === "admin")) { %>
+                        <button class="comment-delete" data-comment-id="<%= comment.id %>">Delete</button>
+                        <% } else if (currentUser) { %>
+                        <button class="comment-delete report-btn" data-report-type="comment" data-report-id="<%= comment.id %>" data-report-toggle="reportBox-comment-<%= comment.id %>">Report</button>
+                        <div class="report-box report-box-inline hidden" id="reportBox-comment-<%= comment.id %>">
+                            <textarea class="report-reason" placeholder="Describe the issue with this comment..."></textarea>
+                            <button class="report-submit" data-report-type="comment" data-report-id="<%= comment.id %>">Submit Report</button>
+                            <span class="report-status"></span>
+                        </div>
+                        <% } %>
+                    </div>
+                    <% }); %>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    </main>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section footer-logo">
+                <div class="logo-footer">
+                    <span class="art">ART</span><span class="elio">élio</span>
+                </div>
+                <p class="footer-description">Human-curated art, made to be experienced. Discover masterpieces that speak to your soul.</p>
+            </div>
+
+            <div class="footer-section">
+                <h4><a href="/about.html">About Us</a></h4>
+                <ul>
+                    <li><a href="/about.html#story">Our Story</a></li>
+                    <li><a href="/about.html#mission">Our Mission</a></li>
+                    <li><a href="/about.html#vision">Our Vision</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4><a href="/help.html">Help</a></h4>
+                <ul>
+                    <li><a href="/help.html#faq">FAQ</a></li>
+                    <li><a href="/help.html#privacy">Privacy Policy</a></li>
+                    <li><a href="/help.html#terms">Terms and Conditions</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Get in Touch With Us</h4>
+                <div class="newsletter-form">
+                    <input type="email" placeholder="Enter your email address" class="email-input">
+                    <button class="subscribe-btn">Subscribe</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 ARTélio. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+      (function () {
+        const stars = document.querySelectorAll('.star');
+        let selectedRating = 0;
+
+        stars.forEach(star => {
+            star.addEventListener('mouseover', () => {
+                const val = parseInt(star.getAttribute('data-value'));
+                stars.forEach((s, i) => {
+                    s.classList.toggle('bi-star-fill', i < val);
+                    s.classList.toggle('bi-star', i >= val);
+                });
+            });
+
+            star.addEventListener('mouseout', () => {
+                stars.forEach((s, i) => {
+                    s.classList.toggle('bi-star-fill', i < selectedRating);
+                    s.classList.toggle('bi-star', i >= selectedRating);
+                });
+            });
+
+            star.addEventListener('click', () => {
+                selectedRating = parseInt(star.getAttribute('data-value'));
+                stars.forEach((s, i) => {
+                    s.classList.toggle('bi-star-fill', i < selectedRating);
+                    s.classList.toggle('bi-star', i >= selectedRating);
+                });
+            });
+        });
+
+        const addToCartBtn = document.getElementById('addToCartBtn');
+        if (addToCartBtn) {
+            addToCartBtn.addEventListener('click', async () => {
+                const id = addToCartBtn.dataset.artworkId;
+                const res = await fetch('/cart/add/' + id, { method: 'POST' });
+                const data = await res.json();
+                const msg = document.getElementById('cartMessage');
+                if (!res.ok) {
+                    msg.textContent = data.error;
+                    msg.classList.add('visible');
+                } else {
+                    window.location.href = '/cart-in';
+                }
+            });
+        }
+
+        const submitReviewBtn = document.getElementById('submitReviewBtn');
+        if (submitReviewBtn) {
+            submitReviewBtn.addEventListener('click', async () => {
+                const comment = document.getElementById('reviewComment').value.trim();
+                const msg = document.getElementById('reviewMessage');
+                if (!comment && selectedRating === 0) {
+                    msg.textContent = 'Write a comment or pick a rating first.';
+                    msg.classList.add('visible');
+                    return;
+                }
+                const res = await fetch('/artwork/' + submitReviewBtn.dataset.artworkId + '/feedback', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ comment, rating: selectedRating }),
+                });
+                if (res.ok) {
+                    window.location.reload();
+                } else {
+                    msg.textContent = 'Something went wrong. Try again.';
+                    msg.classList.add('visible');
+                }
+            });
+        }
+
+        document.querySelectorAll('.comment-delete').forEach((btn) => {
+            btn.addEventListener('click', async () => {
+                await fetch('/artwork/comments/' + btn.dataset.commentId + '/delete', { method: 'POST' });
+                window.location.reload();
+            });
+        });
+
+        const saveBtn = document.getElementById('saveBtn');
+        if (saveBtn) {
+            saveBtn.addEventListener('click', async () => {
+                const id = saveBtn.dataset.artworkId;
+                const res = await fetch('/saved/artwork/' + id, { method: 'POST' });
+                const data = await res.json();
+                if (res.ok) {
+                    saveBtn.innerHTML = data.saved
+                        ? '<i class="bi bi-heart-fill"></i> Saved'
+                        : '<i class="bi bi-heart"></i> Save to Wishlist';
+                }
+            });
+        }
+
+        document.querySelectorAll('.report-btn').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                document.getElementById(btn.dataset.reportToggle).classList.toggle('hidden');
+            });
+        });
+        document.querySelectorAll('.report-submit').forEach((btn) => {
+            btn.addEventListener('click', async () => {
+                const box = btn.closest('.report-box');
+                const reason = box.querySelector('.report-reason').value.trim();
+                const statusEl = box.querySelector('.report-status');
+                if (!reason) {
+                    statusEl.textContent = 'Please describe the issue.';
+                    return;
+                }
+                const res = await fetch('/report', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ itemType: btn.dataset.reportType, itemId: btn.dataset.reportId, reason }),
+                });
+                const data = await res.json();
+                statusEl.textContent = res.ok ? 'Report submitted. Thank you.' : data.error;
+                if (res.ok) {
+                    box.querySelector('.report-reason').disabled = true;
+                    btn.disabled = true;
+                    btn.textContent = 'Reported';
+                }
+            });
+        });
+      })();
+    </script>
+    <script src="/js/main.js"></script>
+</body>
+</html>

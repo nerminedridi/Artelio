@@ -1,0 +1,30 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none !important;
+  color: inherit;
+}
+
+a:hover, a:visited, a:active {
+  text-decoration: none !important;
+}
+
+.form-error {
+  display: none;
+  color: #b00020;
+  font-size: 0.9rem;
+  margin-top: 0.75rem;
+}
+
+.form-error.visible {
+  display: block;
+}
+
+.no-scroll {
+  overflow: hidden;
+}

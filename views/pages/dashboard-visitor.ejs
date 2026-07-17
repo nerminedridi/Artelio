@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARTélio - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@800&family=EB+Garamond:wght@400;500&family=Gelasio:wght@400;500;600;700&family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Luxurious+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/dashboard-visitor.css">
+</head>
+<body>
+<%
+  function timeAgo(date) {
+    const days = Math.floor((Date.now() - new Date(date).getTime()) / 86400000);
+    if (days < 1) return "today";
+    if (days === 1) return "1 day ago";
+    if (days < 7) return `${days} days ago`;
+    const weeks = Math.floor(days / 7);
+    if (weeks < 5) return weeks === 1 ? "1 week ago" : `${weeks} weeks ago`;
+    const months = Math.floor(days / 30);
+    return months <= 1 ? "1 month ago" : `${months} months ago`;
+  }
+  const actionLabel = { rated: "Rated", commented: "Commented on", purchased: "Purchased", saved: "Saved" };
+%>
+
+    <header class="header">
+        <h1 class="logo" data-nav="/home">ARTélio</h1>
+        <div class="header-icons">
+            <div class="notification-wrapper">
+                <button class="cart-btn" id="notificationBell" title="Notifications"><i class="bi bi-bell"></i></button>
+                <div class="notification-panel" id="notificationPanel">
+                    <div class="notification-panel-header">
+                        <h3>Notifications</h3>
+                        <button class="mute-all-btn" id="muteAllBtn">Silence All</button>
+                    </div>
+                    <div class="notification-list" id="notificationList">
+                        <div class="notification-item">
+                            <p>A showroom you saved has new artworks.</p>
+                            <span class="notification-time">Today</span>
+                        </div>
+                        <div class="notification-item">
+                            <p>Your order was delivered — leave a review!</p>
+                            <span class="notification-time">This week</span>
+                        </div>
+                    </div>
+                    <p class="notification-empty" id="notificationEmpty" hidden>Notifications silenced.</p>
+                    <a href="/notifications" class="view-all-link">View All</a>
+                </div>
+            </div>
+            <button class="cart-btn" title="Cart" data-nav="/cart-in"><i class="bi bi-bag-heart"></i></button>
+            <button class="cart-btn" title="Profile" data-nav="/my-profile"><i class="bi bi-person"></i></button>
+        </div>
+    </header>
+
+
+    <div class="dashboard-container">
+
+
+        <aside class="sidebar">
+            <div class="profile-section" data-nav="/my-profile" title="View profile">
+                <img src="<%= currentUser.avatar_url || '/images/profile.png' %>" alt="Profile" class="profile-img">
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="/orders" class="nav-link">
+                    <i class="bi bi-box-seam"></i>
+                    <span>Orders</span>
+                </a>
+                <a href="/settings.html" class="nav-link">
+                    <i class="bi bi-gear"></i>
+                    <span>Settings</span>
+                </a>
+                <a href="/logout" class="nav-link">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </aside>
+
+
+        <main class="main-content">
+
+
+            <section class="greeting-section">
+                <div class="greeting-content">
+                    <h1 class="greeting-title">Hi <%= currentUser.username %>!</h1>
+                    <p class="greeting-subtitle">Welcome to your personal canvas.</p>
+                </div>
+                <div class="greeting-image">
+                    <img src="/images/visitor-logo.png" alt="Artwork" class="eye-img">
+                </div>
+            </section>
+
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <span class="stat-number"><%= savedCount %></span>
+                    <span class="stat-label">Saved</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number"><%= ratedCount %></span>
+                    <span class="stat-label">Rated</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number"><%= reviewCount %></span>
+                    <span class="stat-label">Reviews</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number"><%= orderCount %></span>
+                    <span class="stat-label">Orders</span>
+                </div>
+            </div>
+
+
+            <section class="explore-section">
+                <h2 class="section-title">Continue Exploring</h2>
+
+                <div class="explore-grid">
+                    <% if (exploreShowroom) { %>
+                    <a class="explore-card" href="/single-showroom?room=<%= exploreShowroom.id %>">
+                        <div class="card-header">Showroom</div>
+                        <img src="<%= exploreShowroom.cover_image_url %>" alt="Showroom" class="card-img">
+                        <div class="card-details">
+                            <p><strong>Title:</strong> <span class="title-text"><%= exploreShowroom.title %></span></p>
+                            <p><strong>Curated by:</strong> <span class="artist-text"><%= exploreShowroom.curator_name %></span></p>
+                            <p><strong>Theme:</strong> <span class="theme-text"><%= exploreShowroom.theme %></span></p>
+                            <p><strong>Items:</strong> <span class="items-text"><%= exploreShowroom.artwork_count %> Artworks</span></p>
+                        </div>
+                    </a>
+                    <% } %>
+
+                    <% exploreArtworks.forEach(function(art) { %>
+                    <a class="explore-card" href="/artwork-details?id=<%= art.id %>">
+                        <div class="card-header">Artwork</div>
+                        <img src="<%= art.image_url %>" alt="Artwork" class="card-img">
+                        <div class="card-details">
+                            <p><strong>Title:</strong> <span class="title-text"><%= art.title %></span></p>
+                            <p><strong>Artist:</strong> <span class="artist-text"><%= art.artist_name %></span></p>
+                            <p><strong>Saves:</strong> <span class="views-text"><%= art.save_count %></span></p>
+                        </div>
+                    </a>
+                    <% }); %>
+
+                    <% if (exploreArtist) { %>
+                    <a class="explore-card" href="/profiles?user=<%= exploreArtist.id %>">
+                        <div class="card-header">Artist</div>
+                        <img src="<%= exploreArtist.avatar_url || '/images/profile.png' %>" alt="Artist" class="card-img">
+                        <div class="card-details">
+                            <p><strong>Name:</strong> <span class="artist-text"><%= exploreArtist.username %></span></p>
+                            <p><strong>Followers:</strong> <span class="followers-text"><%= exploreArtist.rating_count %> reviews</span></p>
+                            <p><strong>Artworks:</strong> <span class="artworks-text"><%= exploreArtist.artwork_count %></span></p>
+                        </div>
+                    </a>
+                    <% } %>
+                </div>
+            </section>
+
+
+            <section class="activity-section">
+                <h2 class="section-title">Recent Activity</h2>
+
+                <div class="activity-table">
+                    <div class="table-header">
+                        <div class="table-col">Item</div>
+                        <div class="table-col">Action</div>
+                        <div class="table-col">Date</div>
+                    </div>
+                    <% if (activity.length === 0) { %>
+                    <div class="table-row"><div class="table-col">No activity yet — go explore some art!</div></div>
+                    <% } %>
+                    <% activity.forEach(function(a) { %>
+                    <div class="table-row">
+                        <div class="table-col"><%= a.item %></div>
+                        <div class="table-col"><%= actionLabel[a.action] %></div>
+                        <div class="table-col"><%= timeAgo(a.at) %></div>
+                    </div>
+                    <% }); %>
+                </div>
+            </section>
+        </main>
+
+
+        <aside class="right-sidebar">
+            <h2 class="sidebar-title">Saved For Later</h2>
+
+            <% if (savedArtworks.length === 0) { %>
+            <p class="no-saved">Nothing saved yet.</p>
+            <% } %>
+            <% savedArtworks.forEach(function(item) { %>
+            <a class="saved-card" href="/artwork-details?id=<%= item.id %>">
+                <img src="<%= item.image_url %>" alt="<%= item.title %>" class="saved-img">
+                <h3 class="saved-title"><%= item.title %></h3>
+                <p class="saved-artist">Artist: <span><%= item.artist_name %></span></p>
+                <p class="saved-style">Price: <span>€<%= Number(item.price).toFixed(2) %></span></p>
+            </a>
+            <% }); %>
+        </aside>
+    </div>
+
+
+    <footer class="footer">
+        <p>© 2026 ARTélio. All rights reserved.</p>
+    </footer>
+    <script src="/js/main.js"></script>
+</body>
+</html>

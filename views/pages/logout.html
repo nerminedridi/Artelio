@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Log Out – ARTélio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Source+Serif+4:wght@400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/logout.css"/>
+</head>
+<body>
+  <div class="overlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <h2 class="modal-title" id="modal-title">Logging Out?</h2>
+      <div class="birds-wrapper">
+        <img class="birds-left"  src="images/birds.png" alt="birds left"/>
+        <img class="birds-right" src="images/birds.png" alt="birds right"/>
+      </div>
+      <p class="modal-text">
+        Are you sure you want to log out? You are always
+        welcomed to log back in and visit your creative space.
+      </p>
+      <div class="btn-row">
+        <button class="btn btn-cancel" id="cancelLogoutBtn">Cancel</button>
+        <span class="or-label">or</span>
+        <button class="btn btn-logout" id="confirmLogoutBtn">Log Out</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("cancelLogoutBtn").addEventListener("click", () => {
+      window.history.back();
+    });
+    document.getElementById("confirmLogoutBtn").addEventListener("click", async () => {
+      await fetch("/logout", { method: "POST" });
+      window.location.href = "/";
+    });
+  </script>
+</body>
+</html>

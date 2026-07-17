@@ -1,0 +1,199 @@
+
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-bg:            #8e95a8;
+  --color-header-bg:     #4a2e20;
+  --color-footer-bg:     #4a2e20;
+  --color-card-bg:       #c8cad4;
+  --color-logo:          #6F7DAE;
+  --color-close-btn-bg:  #6F7DAE;
+  --color-close-btn-text:#1a1a2e;
+  --color-title:         #3b1c10;
+  --color-body:          #3b1c10;
+  --color-btn-bg:        #3b1c10;
+  --color-btn-text:      #f0ece4;
+  --font-display:        'Playfair Display', Georgia, serif;
+  --font-body:           'Cormorant Garamond', Georgia, serif;
+}
+
+html, body {
+  min-height: 100vh;
+  font-family: var(--font-body);
+  background-color: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.site-header {
+  background-color: var(--color-header-bg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5rem;
+  height: 76px;
+  flex-shrink: 0;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-logo);
+  letter-spacing: 0.01em;
+}
+
+.close-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--color-close-btn-bg);
+  color: var(--color-close-btn-text);
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1.2rem;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.close-btn:hover { opacity: 0.85; }
+.close-btn .cart-icon {
+  width: 22px;
+  height: 22px;
+  stroke: var(--color-close-btn-text);
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 2rem;
+}
+
+.guest-card {
+  background-color: var(--color-card-bg);
+  border-radius: 22px;
+  width: 100%;
+  max-width: 680px;
+  padding: 2.8rem 3.5rem 2.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.cart-title {
+  font-family: var(--font-display);
+  font-size: 9rem;
+  font-style: italic;
+  font-weight: 500;
+  color: var(--color-title);
+  line-height: 1;
+  text-align: center;
+  margin-bottom: 0.3rem;
+}
+
+.cart-subtitle {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--color-title);
+  text-align: center;
+  margin-bottom: 1.4rem;
+}
+.cart-illustration {
+  width: 240px;
+  height: 220px;
+  margin-bottom: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-img {
+  width: 130%;
+  height: 125%;
+  object-fit: contain;
+}
+
+.guest-message {
+  font-family: var(--font-display);
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: var(--color-body);
+  text-align: center;
+  line-height: 1.55;
+  margin-bottom: 2rem;
+}
+
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.btn-signup,
+.btn-login {
+  background-color: var(--color-btn-bg);
+  color: var(--color-btn-text);
+  border: none;
+  border-radius: 30px;
+  padding: 0.75rem 2.4rem;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+  min-width: 130px;
+  text-align: center;
+}
+.btn-signup:hover,
+.btn-login:hover {
+  transform: translateY(-1px);
+}
+
+.btn-or {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--color-body);
+}
+
+.tagline {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--color-body);
+  text-align: center;
+  opacity: 0.8;
+}
+
+.site-footer {
+  background-color: var(--color-footer-bg);
+  text-align: center;
+  padding: 1.1rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: rgba(240, 232, 222, 0.65);
+  flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+  .guest-card {
+    padding: 2rem 1.5rem;
+  }
+  .cart-title { font-size: 2.2rem; }
+  .guest-message { font-size: 1rem; }
+  .auth-buttons { flex-direction: column; gap: 0.8rem; }
+  .btn-or { display: none; }
+}

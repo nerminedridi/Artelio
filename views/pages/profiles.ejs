@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARTélio - <%= profile.username %></title>
+    <link href="https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@800&family=EB+Garamond:wght@400;500;600;700&family=Gelasio:wght@400;500;600;700&family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/profiles.css">
+</head>
+<body>
+<%
+  function renderStars(avg) {
+    const rounded = Math.round(avg * 2) / 2;
+    let html = "";
+    for (let i = 1; i <= 5; i++) {
+      if (rounded >= i) html += '<i class="bi bi-star-fill"></i>';
+      else if (rounded >= i - 0.5) html += '<i class="bi bi-star-half"></i>';
+      else html += '<i class="bi bi-star"></i>';
+    }
+    return html;
+  }
+  function timeAgo(date) {
+    const days = Math.floor((Date.now() - new Date(date).getTime()) / 86400000);
+    if (days < 1) return "today";
+    if (days === 1) return "1 day ago";
+    if (days < 7) return `${days} days ago`;
+    const weeks = Math.floor(days / 7);
+    if (weeks < 5) return weeks === 1 ? "1 week ago" : `${weeks} weeks ago`;
+    const months = Math.floor(days / 30);
+    return months <= 1 ? "1 month ago" : `${months} months ago`;
+  }
+  const isArtist = profileType === "artist";
+  const specialty = tags.length
+    ? tags.slice(0, 2).map((t) => t[0].toUpperCase() + t.slice(1)).join(" · ")
+    : (isArtist ? "Artist on ARTélio" : "Curator on ARTélio");
+  const memberSince = new Date(profile.created_at).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+%>
+
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">ARTélio</a>
+            <nav class="nav-links">
+                <a href="/showrooms.html">Showrooms</a>
+                <a href="/curators.html">Curators</a>
+                <a href="/artists.html">Artists</a>
+                <a href="/explore.html">Explore</a>
+            </nav>
+            <div class="header-icons">
+                <button class="icon-btn" title="Search" data-nav="/search">
+                    <i class="bi bi-search"></i>
+                </button>
+                <button class="icon-btn" title="Cart" data-nav="/cart-out">
+                    <i class="bi bi-bag-heart"></i>
+                </button>
+                <% if (currentUser) { %>
+                <button class="icon-btn" title="Profile" data-nav="/dashboard"><i class="bi bi-person"></i></button>
+                <% } else { %>
+                <a href="/login" class="btn-join">Join Now</a>
+                <% } %>
+            </div>
+        </div>
+    </header>
+
+    <div class="breadcrumb">
+        <button class="back-btn" data-back>
+            <i class="bi bi-chevron-left"></i> Back
+        </button>
+    </div>
+
+    <main class="main-container">
+
+        <section class="profile-hero">
+            <div class="hero-cover">
+                <img id="heroCover" src="<%= (works[0] && works[0].image_url) || (works[0] && works[0].cover_image_url) || profile.avatar_url || '/images/profile.png' %>" alt="Cover">
+                <div class="hero-overlay"></div>
+            </div>
+
+            <div class="hero-content">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <% if (profile.avatar_url) { %><img src="<%= profile.avatar_url %>" alt="<%= profile.username %>"><% } else { %><i class="bi bi-person-circle"></i><% } %>
+                    </div>
+
+                    <div class="profile-info">
+                        <h1 id="profileName"><%= profile.username %></h1>
+                        <p id="profileSpecialty"><%= specialty %></p>
+
+                        <div class="profile-rating">
+                            <div id="profileStars"><%- renderStars(profile.avg_rating) %></div>
+                            <span id="ratingValue"><%= Number(profile.avg_rating).toFixed(1) %></span>
+                            <span id="reviewCount">(<%= profile.rating_count %> review<%= profile.rating_count == 1 ? "" : "s" %>)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-stats">
+                    <% if (isArtist) { %>
+                    <div class="stat">
+                        <span class="stat-icon"><i class="bi bi-images"></i></span>
+                        <span class="stat-label">Artworks</span>
+                        <span class="stat-value"><%= profile.artwork_count %></span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-icon"><i class="bi bi-heart-fill"></i></span>
+                        <span class="stat-label">Likes</span>
+                        <span class="stat-value"><%= profile.like_count %></span>
+                    </div>
+                    <% } else { %>
+                    <div class="stat">
+                        <span class="stat-icon"><i class="bi bi-collection"></i></span>
+                        <span class="stat-label">Showrooms</span>
+                        <span class="stat-value"><%= profile.showroom_count %></span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-icon"><i class="bi bi-images"></i></span>
+                        <span class="stat-label">Artworks</span>
+                        <span class="stat-value"><%= profile.artwork_count %></span>
+                    </div>
+                    <% } %>
+                    <div class="stat">
+                        <span class="stat-icon"><i class="bi bi-chat-quote"></i></span>
+                        <span class="stat-label">Reviews</span>
+                        <span class="stat-value"><%= profile.rating_count %></span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-icon"><i class="bi bi-people"></i></span>
+                        <span class="stat-label">Followers</span>
+                        <span class="stat-value"><%= profile.follower_count %></span>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary">
+                        <i class="bi bi-heart"></i> Follow
+                    </button>
+                    <button class="btn btn-secondary">
+                        <i class="bi bi-share"></i> Share
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-section">
+            <h2 class="section-heading">About</h2>
+            <p id="profileBio">
+                <%= profile.bio || "No bio yet." %>
+            </p>
+
+            <div class="about-grid">
+                <div class="about-item">
+                    <h4 class="about-label">Member Since</h4>
+                    <p id="profileMember"><%= memberSince %></p>
+                </div>
+                <% if (tags.length > 0) { %>
+                <div class="about-item">
+                    <h4 class="about-label">Specialties</h4>
+                    <div id="profileTags">
+                        <% tags.forEach(function(tag) { %>
+                        <span class="tag"><%= tag[0].toUpperCase() + tag.slice(1) %></span>
+                        <% }); %>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+        </section>
+
+        <section class="works-section">
+            <div class="works-header">
+                <h2 class="section-heading" id="worksTitle"><%= isArtist ? "Artworks" : "Showrooms" %></h2>
+            </div>
+
+            <div id="worksGrid" class="works-grid">
+                <% if (works.length === 0) { %>
+                <p class="no-works">Nothing published yet.</p>
+                <% } %>
+                <% works.forEach(function(work) { %>
+                <div class="work-card">
+                    <div class="work-image">
+                        <img src="<%= isArtist ? work.image_url : work.cover_image_url %>" alt="Work" loading="lazy">
+                        <div class="image-overlay"></div>
+                        <button class="wishlist-btn"><i class="bi bi-heart"></i></button>
+                    </div>
+                    <div class="work-info">
+                        <h4 class="work-title"><%= work.title %></h4>
+                        <% if (isArtist) { %>
+                        <div class="work-rating">
+                            <%- renderStars(work.avg_rating) %>
+                            <span><%= Number(work.avg_rating).toFixed(1) %></span>
+                        </div>
+                        <div class="work-footer">
+                            <span class="price">€<%= Number(work.price).toFixed(2) %></span>
+                            <a href="/artwork-details?id=<%= work.id %>" class="view-btn">View →</a>
+                        </div>
+                        <% } else { %>
+                        <div class="work-rating">
+                            <i class="bi bi-images"></i> <span><%= work.artwork_count %> Artworks</span>
+                        </div>
+                        <div class="work-footer">
+                            <a href="/single-showroom?room=<%= work.id %>" class="view-btn">View →</a>
+                        </div>
+                        <% } %>
+                    </div>
+                </div>
+                <% }); %>
+            </div>
+        </section>
+        <section class="reviews-section">
+            <h2 class="section-heading">Reviews & Feedback</h2>
+
+            <div class="rating-box">
+                <div class="rating-stars"><%- renderStars(profile.avg_rating) %></div>
+                <span class="rating-value"><%= Number(profile.avg_rating).toFixed(1) %> out of 5</span>
+                <span class="rating-count">Based on <%= profile.rating_count %> review<%= profile.rating_count == 1 ? "" : "s" %></span>
+            </div>
+
+            <div class="review-input">
+                <textarea placeholder="Share your thoughts about this <%= isArtist ? 'artist' : 'curator' %>..." rows="3"></textarea>
+                <div class="review-controls">
+                    <div class="star-rating">
+                        <i class="bi bi-star"></i>
+                        <i class="bi bi-star"></i>
+                        <i class="bi bi-star"></i>
+                        <i class="bi bi-star"></i>
+                        <i class="bi bi-star"></i>
+                    </div>
+                    <button class="submit-btn">Submit Review</button>
+                </div>
+            </div>
+
+            <div class="comments-list">
+                <% if (reviews.length === 0) { %>
+                <p class="no-reviews">No feedback yet.</p>
+                <% } %>
+                <% reviews.forEach(function(review) { %>
+                <div class="comment">
+                    <div class="comment-avatar"><i class="bi bi-person-circle"></i></div>
+                    <div class="comment-body">
+                        <div class="comment-header">
+                            <h4 class="comment-author"><%= review.username %></h4>
+                            <span class="comment-date"><%= timeAgo(review.created_at) %></span>
+                        </div>
+                        <p class="comment-text">
+                            <%= review.content || review.message %>
+                            <% if (review.artwork_title || review.room_title) { %>
+                            <em>— on <%= review.artwork_title || review.room_title %></em>
+                            <% } %>
+                        </p>
+                    </div>
+                </div>
+                <% }); %>
+            </div>
+        </section>
+
+    </div>
+    </main>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section footer-logo">
+                <div class="logo-footer">
+                    <span class="art">ART</span><span class="elio">élio</span>
+                </div>
+                <p class="footer-description">Human-curated art, made to be experienced. Discover masterpieces that speak to your soul.</p>
+            </div>
+
+            <div class="footer-section">
+                <h4><a href="/about.html">About Us</a></h4>
+                <ul>
+                    <li><a href="/about.html#story">Our Story</a></li>
+                    <li><a href="/about.html#mission">Our Mission</a></li>
+                    <li><a href="/about.html#vision">Our Vision</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4><a href="/help.html">Help</a></h4>
+                <ul>
+                    <li><a href="/help.html#faq">FAQ</a></li>
+                    <li><a href="/help.html#privacy">Privacy Policy</a></li>
+                    <li><a href="/help.html#terms">Terms and Conditions</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Get in Touch With Us</h4>
+                <div class="newsletter-form">
+                    <input type="email" placeholder="Enter your email address" class="email-input">
+                    <button class="subscribe-btn">Subscribe</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 ARTélio. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>
