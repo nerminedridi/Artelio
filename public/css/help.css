@@ -84,6 +84,10 @@ body {
   margin-left: 50px;
 }
 
+.icon-btn.nav-toggle {
+  display: none;
+}
+
 .icon-btn,
 .btn-join,
 .search-btn,
@@ -504,6 +508,11 @@ body {
   margin-top: 2rem;
 }
 
+.contact-info,
+.contact-form-container {
+  min-width: 0;
+}
+
 .contact-info {
   background: #FFFFFF;
   padding: 2rem;
@@ -896,8 +905,44 @@ body {
     padding: 1rem;
   }
 
+  .icon-btn.nav-toggle {
+    display: inline-flex;
+  }
+
+  .logo {
+    font-size: 32px;
+  }
+
+  .header-icons {
+    gap: 0.5rem;
+    margin-left: 0;
+  }
+
+  .btn-join {
+    width: auto;
+    height: auto;
+    padding: 0.6rem 1.25rem;
+    font-size: 16px;
+  }
+
   .nav-links {
     display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-left: 0;
+    background: #573E2E;
+    padding: 1.5rem;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
+    z-index: 99;
+  }
+
+  .nav-links.open {
+    display: flex;
   }
 
   .footer-content {

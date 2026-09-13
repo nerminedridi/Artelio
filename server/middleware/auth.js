@@ -1,13 +1,21 @@
 const pool = require("../../db");
 
+function setNoCache(res) {
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
+  res.set("Pragma", "no-cache");
+  res.set("Expires", "0");
+}
+
 class AuthGuard {
   static requireAuth(req, res, next) {
+    setNoCache(res);
     if (req.isAuthenticated()) return next();
     res.redirect("/login");
   }
 
   static requireRole(...roles) {
     return (req, res, next) => {
+      setNoCache(res);
       if (!req.isAuthenticated()) return res.redirect("/login");
       if (!roles.includes(req.user.role)) {
         return res.status(403).render("access-denied", { message: "You don't have permission to view this page." });
