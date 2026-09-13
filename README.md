@@ -141,14 +141,13 @@ The repo includes a [`render.yaml`](render.yaml) Blueprint that provisions a fre
 1. Push this repo to GitHub (already done if you're reading this from there).
 2. On Render: **New +** → **Blueprint** → connect this repo. Render reads `render.yaml` and creates the `artelio` web service and `artelio-db` database together, wiring `DATABASE_URL` and a random `SESSION_SECRET` automatically.
 3. Before the first deploy finishes setting up, add the Cloudinary env vars on the web service (**Environment** tab) — `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` — copied from your local `.env`. They're marked `sync: false` in the blueprint so Render won't overwrite them on redeploys.
-4. Once the service is live, apply the schema **once** via Render's Shell tab on the web service (or `psql` against the external database URL from Render's dashboard):
+4. Once the service is live, apply the schema **once**. Render's free web service plan doesn't include Shell access, so run it from your own machine against the database's **External Database URL** (copy it from the `artelio-db` page → Connections):
    ```bash
-   npm run db:migrate
-   npm run db:seed   # optional — loads the same demo data as local dev
+   DATABASE_URL="<external database url>" NODE_ENV=production node db/migrate.js
+   DATABASE_URL="<external database url>" NODE_ENV=production node db/seed.js   # optional — same demo data as local dev
    ```
-   Do **not** re-run `db:migrate` after that: `schema.sql` drops and recreates every table, so running it again wipes production data. It's meant for first-time setup only.
-5. Live URL: `[fill in after deploying]`
+   Do **not** re-run the migrate step after that: `schema.sql` drops and recreates every table, so running it again wipes production data. It's meant for first-time setup only.
 
 ### Live demo
 
-[Fill in deployed URL here, if applicable]
+https://artelio-kpv3.onrender.com/
