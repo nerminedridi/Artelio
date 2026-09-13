@@ -134,6 +134,21 @@ Image upload requires your own Cloudinary credentials in `.env` (see `.env.examp
 - Full responsive support (mobile/tablet) is implemented for all public pages; dashboards are desktop-first by design, per the project spec.
 - Cross-browser tested on Chrome and Firefox, per the spec's required versions (Chrome 133+, Firefox 135+).
 
-## Live demo
+## Deployment
+
+The repo includes a [`render.yaml`](render.yaml) Blueprint that provisions a free Node web service plus a free PostgreSQL database on [Render](https://render.com).
+
+1. Push this repo to GitHub (already done if you're reading this from there).
+2. On Render: **New +** → **Blueprint** → connect this repo. Render reads `render.yaml` and creates the `artelio` web service and `artelio-db` database together, wiring `DATABASE_URL` and a random `SESSION_SECRET` automatically.
+3. Before the first deploy finishes setting up, add the Cloudinary env vars on the web service (**Environment** tab) — `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` — copied from your local `.env`. They're marked `sync: false` in the blueprint so Render won't overwrite them on redeploys.
+4. Once the service is live, apply the schema **once** via Render's Shell tab on the web service (or `psql` against the external database URL from Render's dashboard):
+   ```bash
+   npm run db:migrate
+   npm run db:seed   # optional — loads the same demo data as local dev
+   ```
+   Do **not** re-run `db:migrate` after that: `schema.sql` drops and recreates every table, so running it again wipes production data. It's meant for first-time setup only.
+5. Live URL: `[fill in after deploying]`
+
+### Live demo
 
 [Fill in deployed URL here, if applicable]
