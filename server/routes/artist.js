@@ -50,7 +50,7 @@ router.post(
         );
       }
 
-      res.redirect("/dashboard-artist");
+      res.redirect(req.acctUrl("/dashboard-artist"));
     } catch (err) {
       next(err);
     }
@@ -92,7 +92,7 @@ router.post(
 
       const imageUrl = req.file ? (req.file.secure_url || req.file.url) : null;
       await Artwork.updateOwn(req.params.id, req.user.id, { title, description, price, styleTags, imageUrl, medium, dimensions });
-      res.redirect("/dashboard-artist");
+      res.redirect(req.acctUrl("/dashboard-artist"));
     } catch (err) {
       next(err);
     }
@@ -106,7 +106,7 @@ router.post(
   async (req, res, next) => {
     try {
       await Artwork.delete(req.params.id);
-      res.redirect("/dashboard-artist");
+      res.redirect(req.acctUrl("/dashboard-artist"));
     } catch (err) {
       if (isForeignKeyViolation(err)) {
         return res.status(409).send("Can't delete: this artwork has existing orders or submissions tied to it.");

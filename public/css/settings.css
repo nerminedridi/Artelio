@@ -228,6 +228,16 @@ body {
 
 .form-input::placeholder { color: #9A9A9A; }
 
+.manage-accounts-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.manage-accounts-link:hover {
+  border-color: #2E3A5F;
+}
+
 .form-input:focus {
   border-color: #6F7DAE;
   box-shadow: 0 0 0 3px rgba(111,125,174,0.15);

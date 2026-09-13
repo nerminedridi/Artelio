@@ -13,8 +13,8 @@
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
       <h2 class="modal-title" id="modal-title">Logging Out?</h2>
       <div class="birds-wrapper">
-        <img class="birds-left"  src="images/birds.png" alt="birds left"/>
-        <img class="birds-right" src="images/birds.png" alt="birds right"/>
+        <img class="birds-left"  src="/images/birds.png" alt="birds left"/>
+        <img class="birds-right" src="/images/birds.png" alt="birds right"/>
       </div>
       <p class="modal-text">
         Are you sure you want to log out? You are always
@@ -29,13 +29,14 @@
     </div>
   </div>
 
+  <script src="/js/main.js"></script>
   <script>
     document.getElementById("cancelLogoutBtn").addEventListener("click", () => {
       window.history.back();
     });
     document.getElementById("confirmLogoutBtn").addEventListener("click", async () => {
       await fetch("/logout", { method: "POST" });
-      window.location.href = "/";
+      window.location.href = accountScopedRouting.scoped("/");
     });
   </script>
 </body>

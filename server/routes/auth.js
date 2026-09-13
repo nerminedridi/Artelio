@@ -7,6 +7,21 @@ const router = express.Router();
 
 const ALLOWED_ROLES = ["visitor", "artist", "curator"];
 
+function addAccount(session, userId) {
+  session.accounts = session.accounts || [];
+  let idx = session.accounts.findIndex((a) => a && a.id === userId);
+  if (idx !== -1) return idx;
+
+  idx = session.accounts.findIndex((a) => !a);
+  if (idx !== -1) {
+    session.accounts[idx] = { id: userId };
+    return idx;
+  }
+
+  session.accounts.push({ id: userId });
+  return session.accounts.length - 1;
+}
+
 router.post("/register", async (req, res, next) => {
   const { fullname, email, password, confirm, role, bio } = req.body;
 
@@ -37,15 +52,12 @@ router.post("/register", async (req, res, next) => {
       [fullname, email, passwordHash, finalRole, initialStatus, bio || null]
     );
     const newUser = rows[0];
-
-    req.login(newUser, (err) => {
-      if (err) return next(err);
-      const message =
-        initialStatus === "pending"
-          ? "Account created. A curator account needs admin approval before you can access the dashboard."
-          : null;
-      res.status(201).json({ redirect: "/home", message });
-    });
+    const idx = addAccount(req.session, newUser.id);
+    const message =
+      initialStatus === "pending"
+        ? "Account created. A curator account needs admin approval before you can access the dashboard."
+        : null;
+    res.status(201).json({ redirect: `/u/${idx}/home`, message });
   } catch (err) {
     next(err);
   }
@@ -57,18 +69,35 @@ router.post("/login", (req, res, next) => {
     if (!user) {
       return res.status(401).json({ error: info?.message || "Invalid credentials." });
     }
-    req.login(user, (err) => {
-      if (err) return next(err);
-      res.json({ redirect: "/home" });
-    });
+    const idx = addAccount(req.session, user.id);
+    res.json({ redirect: `/u/${idx}/home` });
   })(req, res, next);
 });
 
-router.post("/logout", (req, res, next) => {
-  req.logout((err) => {
-    if (err) return next(err);
-    res.redirect("/login");
-  });
+router.post("/logout", (req, res) => {
+  if (req.acctIdx !== null && req.session.accounts) {
+    req.session.accounts[req.acctIdx] = null;
+  }
+  res.redirect("/login");
+});
+
+router.get("/accounts", async (req, res, next) => {
+  try {
+    const accounts = req.session.accounts || [];
+    const openAccounts = [];
+    for (let idx = 0; idx < accounts.length; idx++) {
+      const slot = accounts[idx];
+      if (!slot) continue;
+      const { rows } = await pool.query(
+        "SELECT id, username, email, role, avatar_url FROM users WHERE id = $1",
+        [slot.id]
+      );
+      if (rows[0]) openAccounts.push({ idx, ...rows[0] });
+    }
+    res.render("accounts", { openAccounts });
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = router;

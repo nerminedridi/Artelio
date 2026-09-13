@@ -76,7 +76,7 @@ router.get(["/cart-in", "/cart-in.html"], AuthGuard.requireAuth, async (req, res
 router.get(["/checkout", "/checkout.html"], AuthGuard.requireAuth, async (req, res, next) => {
   try {
     const items = await Order.getCartItems(req.session.cart || []);
-    if (items.length === 0) return res.redirect("/cart-in");
+    if (items.length === 0) return res.redirect(req.acctUrl("/cart-in"));
     const subtotal = items.reduce((sum, i) => sum + Number(i.price), 0);
     res.render("checkout", { items, subtotal, error: null });
   } catch (err) {
@@ -86,7 +86,7 @@ router.get(["/checkout", "/checkout.html"], AuthGuard.requireAuth, async (req, r
 
 router.post(["/checkout", "/checkout.html"], AuthGuard.requireAuth, async (req, res, next) => {
   const cartIds = req.session.cart || [];
-  if (cartIds.length === 0) return res.redirect("/cart-in");
+  if (cartIds.length === 0) return res.redirect(req.acctUrl("/cart-in"));
 
   try {
     const { cardNumber, expiry, cvv, cardholderName } = req.body;
@@ -105,7 +105,7 @@ router.post(["/checkout", "/checkout.html"], AuthGuard.requireAuth, async (req, 
     const paymentData = { card_last4: last4, cardholder_name: cardholderName || req.user.username };
     await Order.checkout(req.user.id, cartIds, paymentData);
     req.session.cart = [];
-    res.redirect("/order-confirmation");
+    res.redirect(req.acctUrl("/order-confirmation"));
   } catch (err) {
     const items = await Order.getCartItems(cartIds);
     const subtotal = items.reduce((sum, i) => sum + Number(i.price), 0);

@@ -24,20 +24,4 @@ passport.use(
   })
 );
 
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-passport.deserializeUser(async (id, done) => {
-  try {
-    const { rows } = await pool.query(
-      "SELECT id, username, email, role, status, bio, avatar_url FROM users WHERE id = $1",
-      [id]
-    );
-    done(null, rows[0] || false);
-  } catch (err) {
-    done(err);
-  }
-});
-
 module.exports = passport;

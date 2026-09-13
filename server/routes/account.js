@@ -18,7 +18,7 @@ router.post("/account/update-bio", AuthGuard.requireAuth, async (req, res, next)
   try {
     await User.updateBio(req.user.id, req.body.bio);
     const redirectTo = req.user.role === "admin" ? "/dashboard-admin#section-settings" : "/my-profile";
-    res.redirect(redirectTo);
+    res.redirect(req.acctUrl(redirectTo));
   } catch (err) {
     next(err);
   }

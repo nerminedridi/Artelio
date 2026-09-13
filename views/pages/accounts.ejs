@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARTélio - Your Accounts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@800&family=Gelasio:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <style>
+        body {
+            font-family: 'Gelasio', Georgia, serif;
+            background-color: #E8EEF8;
+            color: #291004;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+        .accounts-card {
+            background: #FFFFFF;
+            border-radius: 18px;
+            box-shadow: 0 20px 50px rgba(17, 19, 34, 0.12);
+            width: 100%;
+            max-width: 480px;
+            padding: 2rem;
+        }
+        .accounts-title {
+            font-family: 'Abhaya Libre', serif;
+            font-weight: 800;
+            font-size: 28px;
+            color: #2E3A5F;
+            margin: 0 0 0.5rem;
+        }
+        .accounts-subtitle {
+            font-size: 14px;
+            color: #5A6B8C;
+            margin: 0 0 1.5rem;
+        }
+        .account-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.9rem 0;
+            border-bottom: 1px solid #E8EEF8;
+        }
+        .account-row:last-of-type {
+            border-bottom: none;
+        }
+        .account-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #2E3A5F;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        .account-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .account-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .account-name {
+            font-weight: 700;
+            font-size: 15px;
+            color: #291004;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .account-role {
+            font-size: 13px;
+            color: #5A6B8C;
+            text-transform: capitalize;
+        }
+        .account-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+        .account-actions a, .account-actions button {
+            border: none;
+            border-radius: 8px;
+            padding: 0.45rem 0.9rem;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            font-family: inherit;
+        }
+        .btn-switch {
+            background: rgba(111, 125, 174, 0.15);
+            color: #2E3A5F;
+        }
+        .btn-switch:hover { background: rgba(111, 125, 174, 0.28); }
+        .btn-signout {
+            background: transparent;
+            color: #A33B3B;
+        }
+        .btn-signout:hover { background: rgba(163, 59, 59, 0.08); }
+        .empty-state {
+            font-size: 14px;
+            color: #5A6B8C;
+            padding: 1rem 0;
+        }
+        .add-account-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            font-weight: 700;
+            color: #2E3A5F;
+            text-decoration: none;
+            font-size: 15px;
+        }
+        .add-account-link:hover { opacity: 0.8; }
+        .back-home {
+            display: block;
+            margin-top: 1.25rem;
+            font-size: 13px;
+            color: #5A6B8C;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="accounts-card">
+        <h1 class="accounts-title">Your Accounts</h1>
+        <p class="accounts-subtitle">Signed in on this browser. Open each in its own tab to use them side by side.</p>
+
+        <% if (openAccounts.length === 0) { %>
+        <p class="empty-state">No accounts signed in yet.</p>
+        <% } else { %>
+        <% openAccounts.forEach(acc => { %>
+        <div class="account-row">
+            <div class="account-avatar">
+                <% if (acc.avatar_url) { %>
+                <img src="<%= acc.avatar_url %>" alt="">
+                <% } else { %>
+                <%= acc.username.charAt(0).toUpperCase() %>
+                <% } %>
+            </div>
+            <div class="account-info">
+                <div class="account-name"><%= acc.username %></div>
+                <div class="account-role"><%= acc.role %></div>
+            </div>
+            <div class="account-actions">
+                <a class="btn-switch" href="/u/<%= acc.idx %>/dashboard">Switch</a>
+                <form data-account-signout action="/u/<%= acc.idx %>/logout" method="POST" style="display:inline;">
+                    <button type="submit" class="btn-signout">Sign out</button>
+                </form>
+            </div>
+        </div>
+        <% }) %>
+        <% } %>
+
+        <a class="add-account-link" href="/login"><i class="bi bi-plus-circle"></i> Add another account</a>
+        <a class="back-home" href="/">Back to ARTélio</a>
+    </div>
+</body>
+</html>

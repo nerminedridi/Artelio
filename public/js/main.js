@@ -1,3 +1,51 @@
+class AccountScopedRouting {
+    constructor() {
+        this.prefix = AccountScopedRouting.getPrefix();
+    }
+
+    static getPrefix() {
+        const match = window.location.pathname.match(/^\/u\/\d+(?=\/|$)/);
+        return match ? match[0] : '';
+    }
+
+    scoped(url) {
+        if (!this.prefix || typeof url !== 'string') return url;
+        if (!url.startsWith('/') || url.startsWith('//')) return url;
+        if (url === this.prefix || url.startsWith(this.prefix + '/')) return url;
+        return this.prefix + url;
+    }
+
+    patchFetch() {
+        const self = this;
+        const originalFetch = window.fetch.bind(window);
+        window.fetch = (input, init) => {
+            if (typeof input === 'string') {
+                input = self.scoped(input);
+            } else if (input instanceof Request) {
+                input = new Request(self.scoped(input.url), input);
+            }
+            return originalFetch(input, init);
+        };
+    }
+
+    rewriteLinks() {
+        if (!this.prefix) return;
+        document.querySelectorAll('a[href^="/"]').forEach((a) => {
+            const href = a.getAttribute('href');
+            const scopedHref = this.scoped(href);
+            if (scopedHref !== href) a.setAttribute('href', scopedHref);
+        });
+        document.querySelectorAll('form[action^="/"]').forEach((f) => {
+            const action = f.getAttribute('action');
+            const scopedAction = this.scoped(action);
+            if (scopedAction !== action) f.setAttribute('action', scopedAction);
+        });
+    }
+}
+
+const accountScopedRouting = new AccountScopedRouting();
+accountScopedRouting.patchFetch();
+
 class ArtworkModal {
     constructor() {
         this.modal = document.getElementById('artworkModal');
@@ -49,7 +97,7 @@ class ArtworkModal {
         const destination = artwork && artwork.showroom_id
             ? `/single-showroom?room=${artwork.showroom_id}`
             : `/artwork-details?id=${this.currentArtworkId}`;
-        window.location.href = destination;
+        window.location.href = accountScopedRouting.scoped(destination);
         this.close();
     }
 
@@ -84,7 +132,7 @@ class SiteNavigation {
         document.addEventListener('click', (event) => {
             const navEl = event.target.closest('[data-nav]');
             if (navEl) {
-                window.location.href = navEl.dataset.nav;
+                window.location.href = accountScopedRouting.scoped(navEl.dataset.nav);
                 return;
             }
             if (event.target.closest('[data-back]')) {
@@ -301,6 +349,7 @@ class NotificationPanel {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    accountScopedRouting.rewriteLinks();
     new ArtworkModal();
     new SiteNavigation();
     new NavMenu();

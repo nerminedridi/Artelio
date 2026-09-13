@@ -68,7 +68,7 @@
         function doSearch() {
             const term = document.getElementById('searchInput').value.trim();
             if (!term) return;
-            window.location.href = `/search-results.html?q=${encodeURIComponent(term)}&filter=${currentFilter}`;
+            window.location.href = accountScopedRouting.scoped(`/search-results.html?q=${encodeURIComponent(term)}&filter=${currentFilter}`);
         }
 
         document.querySelectorAll('.filter-option').forEach((btn) => {
