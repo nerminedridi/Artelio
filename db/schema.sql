@@ -3,6 +3,8 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 DROP TABLE IF EXISTS reports CASCADE;
+DROP TABLE IF EXISTS password_resets CASCADE;
+DROP TABLE IF EXISTS newsletter_subscribers CASCADE;
 DROP TABLE IF EXISTS guestbook_entries CASCADE;
 DROP TABLE IF EXISTS saved_items CASCADE;
 DROP TABLE IF EXISTS ratings CASCADE;
@@ -159,3 +161,21 @@ CREATE INDEX idx_saved_items_user ON saved_items(user_id, item_type);
 CREATE INDEX idx_guestbook_room ON guestbook_entries(room_id);
 CREATE INDEX idx_reports_status ON reports(status);
 CREATE INDEX idx_reports_item ON reports(item_type, item_id);
+
+CREATE TABLE password_resets (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  token VARCHAR(255) UNIQUE NOT NULL,
+  expires_at TIMESTAMP NOT NULL,
+  used_at TIMESTAMP,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE newsletter_subscribers (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  subscribed_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX idx_password_resets_token ON password_resets(token);
+CREATE INDEX idx_password_resets_user ON password_resets(user_id);

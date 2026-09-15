@@ -25,6 +25,17 @@ a:hover, a:visited, a:active {
   display: block;
 }
 
+.form-success {
+  display: none;
+  color: #1a7a3c;
+  font-size: 0.9rem;
+  margin-top: 0.75rem;
+}
+
+.form-success.visible {
+  display: block;
+}
+
 .no-scroll {
   overflow: hidden;
 }

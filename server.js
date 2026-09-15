@@ -15,6 +15,7 @@ const accountRoutes = require("./server/routes/account");
 const ordersRoutes = require("./server/routes/orders");
 const notificationsRoutes = require("./server/routes/notifications");
 const reportsRoutes = require("./server/routes/reports");
+const newsletterRoutes = require("./server/routes/newsletter");
 const AuthGuard = require("./server/middleware/auth");
 const accountContext = require("./server/middleware/accountContext");
 const Artwork = require("./server/models/Artwork");
@@ -75,6 +76,7 @@ mainRouter.use("/", accountRoutes);
 mainRouter.use("/", ordersRoutes);
 mainRouter.use("/", notificationsRoutes);
 mainRouter.use("/", reportsRoutes);
+mainRouter.use("/", newsletterRoutes);
 
 mainRouter.get("/dashboard", AuthGuard.requireAuth, (req, res) => {
   res.redirect(req.acctUrl(roleHome(req.user.role)));
@@ -108,6 +110,12 @@ mainRouter.get("/sign-up", (req, res) => {
 });
 mainRouter.get("/sign-up.html", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "pages", "sign-up.html"));
+});
+mainRouter.get(["/forgot-password", "/forgot-password.html"], (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "pages", "forgot-password.html"));
+});
+mainRouter.get(["/reset-password", "/reset-password.html"], (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "pages", "reset-password.html"));
 });
 mainRouter.get("/search.html", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "pages", "search.html"));

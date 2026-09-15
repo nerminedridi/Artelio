@@ -196,6 +196,17 @@ class AuthForms {
         errorEl.classList.add('visible');
     }
 
+    showFormSuccess(formEl, message) {
+        let successEl = formEl.querySelector('.form-success');
+        if (!successEl) {
+            successEl = document.createElement('p');
+            successEl.className = 'form-success';
+            formEl.appendChild(successEl);
+        }
+        successEl.textContent = message;
+        successEl.classList.add('visible');
+    }
+
     async handleLogin(event) {
         event.preventDefault();
         const form = event.target;
@@ -283,6 +294,78 @@ class AuthForms {
         }
     }
 
+    async handleForgotPassword(event) {
+        event.preventDefault();
+        const form = event.target;
+        const email = document.getElementById('email').value;
+
+        if (!email) {
+            this.showFormError(form, 'Please enter your email address');
+            return;
+        }
+
+        try {
+            const response = await fetch('/forgot-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email }),
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                this.showFormError(form, data.error || 'Something went wrong');
+                return;
+            }
+            form.querySelector('.form-error')?.classList.remove('visible');
+            this.showFormSuccess(form, data.message);
+            form.reset();
+        } catch (err) {
+            this.showFormError(form, 'Something went wrong. Please try again.');
+        }
+    }
+
+    async handleResetPassword(event) {
+        event.preventDefault();
+        const form = event.target;
+        const password = document.getElementById('password').value;
+        const confirm = document.getElementById('confirm').value;
+        const token = new URLSearchParams(window.location.search).get('token');
+
+        if (!token) {
+            this.showFormError(form, 'This reset link is missing its token — request a new one.');
+            return;
+        }
+        if (!password || !confirm) {
+            this.showFormError(form, 'Please fill in all fields');
+            return;
+        }
+        if (password !== confirm) {
+            this.showFormError(form, 'Passwords do not match');
+            return;
+        }
+        if (password.length < 8) {
+            this.showFormError(form, 'Password must be at least 8 characters long');
+            return;
+        }
+
+        try {
+            const response = await fetch('/reset-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token, password, confirm }),
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                this.showFormError(form, data.error || 'Something went wrong');
+                return;
+            }
+            window.location.href = data.redirect;
+        } catch (err) {
+            this.showFormError(form, 'Something went wrong. Please try again.');
+        }
+    }
+
     initRememberedEmail() {
         const rememberedEmail = localStorage.getItem('rememberedEmail');
         const emailInput = document.getElementById('email');
@@ -300,11 +383,73 @@ class AuthForms {
         const signupForm = document.getElementById('signupForm');
         if (signupForm) signupForm.addEventListener('submit', (e) => this.handleSignup(e));
 
+        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+        if (forgotPasswordForm) forgotPasswordForm.addEventListener('submit', (e) => this.handleForgotPassword(e));
+
+        const resetPasswordForm = document.getElementById('resetPasswordForm');
+        if (resetPasswordForm) resetPasswordForm.addEventListener('submit', (e) => this.handleResetPassword(e));
+
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => this.initRememberedEmail());
         } else {
             this.initRememberedEmail();
         }
+    }
+}
+
+class NewsletterForm {
+    constructor() {
+        this.init();
+    }
+
+    showMessage(container, message, isError) {
+        let el = container.querySelector('.newsletter-message');
+        if (!el) {
+            el = document.createElement('p');
+            el.className = 'newsletter-message';
+            container.appendChild(el);
+        }
+        el.textContent = message;
+        el.classList.toggle('form-error', isError);
+        el.classList.toggle('form-success', !isError);
+        el.classList.add('visible');
+    }
+
+    async subscribe(container) {
+        const input = container.querySelector('.email-input');
+        const email = input ? input.value.trim() : '';
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(email)) {
+            this.showMessage(container, 'Enter a valid email address', true);
+            return;
+        }
+
+        try {
+            const response = await fetch('/newsletter/subscribe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email }),
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                this.showMessage(container, data.error || 'Something went wrong', true);
+                return;
+            }
+            this.showMessage(container, data.message, false);
+            if (input) input.value = '';
+        } catch (err) {
+            this.showMessage(container, 'Something went wrong. Please try again.', true);
+        }
+    }
+
+    init() {
+        document.querySelectorAll('.newsletter-form').forEach((container) => {
+            const button = container.querySelector('.subscribe-btn');
+            if (!button) return;
+            button.addEventListener('click', () => this.subscribe(container));
+        });
     }
 }
 
@@ -355,4 +500,5 @@ document.addEventListener('DOMContentLoaded', () => {
     new NavMenu();
     new AuthForms();
     new NotificationPanel();
+    new NewsletterForm();
 });
