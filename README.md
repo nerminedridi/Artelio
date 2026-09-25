@@ -102,6 +102,14 @@ artelio/
 - **Cloudinary, URL-only.** Uploaded images go straight to Cloudinary via API; only the returned secure URL is stored in Postgres. No files are written to local disk.
 - **Global unique showroom theme**, enforced with a database `UNIQUE` constraint (`showrooms.theme`) plus a friendly `409` error on conflict; an admin can also manually override any showroom's theme from the admin dashboard if a conflict needs resolving by hand.
 
+## Security
+
+- `helmet` security headers with a Content-Security-Policy limited to this app's own origin plus Google Fonts, jsDelivr and Cloudinary. Pages still use inline scripts, so `'unsafe-inline'` is allowed for scripts and styles; moving them to external files and nonces is the next step to tighten it.
+- Rate limiting (`express-rate-limit`) on login, registration, password reset and newsletter sign-up.
+- Session cookies are `httpOnly`, `SameSite=Lax` and `secure` in production; sessions live in Postgres. Protected pages send `Cache-Control: no-store` so the back button can't reveal them after logout.
+- Password reset tokens are single-use, expire after an hour, and the endpoint answers identically for known and unknown emails.
+- Not implemented: per-form CSRF tokens (SameSite=Lax covers cross-site form posts in modern browsers).
+
 ## Test accounts
 
 All seeded accounts (from [`db/seed.sql`](db/seed.sql)) use the same password:

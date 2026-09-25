@@ -5,6 +5,7 @@ const pool = require("../../db");
 const PasswordReset = require("../models/PasswordReset");
 const { sendEmail } = require("../utils/email");
 const { welcomeEmail, passwordResetEmail } = require("../utils/emailTemplates");
+const { loginLimiter, registerLimiter, passwordResetLimiter } = require("../middleware/security");
 
 const router = express.Router();
 
@@ -25,7 +26,7 @@ function addAccount(session, userId) {
   return session.accounts.length - 1;
 }
 
-router.post("/register", async (req, res, next) => {
+router.post("/register", registerLimiter, async (req, res, next) => {
   const { fullname, email, password, confirm, role, bio } = req.body;
 
   if (!fullname || !email || !password || !confirm) {
@@ -71,7 +72,7 @@ router.post("/register", async (req, res, next) => {
   }
 });
 
-router.post("/login", (req, res, next) => {
+router.post("/login", loginLimiter, (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
     if (!user) {
@@ -89,7 +90,7 @@ router.post("/logout", (req, res) => {
   res.redirect("/login");
 });
 
-router.post("/forgot-password", async (req, res, next) => {
+router.post("/forgot-password", passwordResetLimiter, async (req, res, next) => {
   const email = (req.body.email || "").trim();
   if (!email) {
     return res.status(400).json({ error: "Enter your email address." });
@@ -115,7 +116,7 @@ router.post("/forgot-password", async (req, res, next) => {
   }
 });
 
-router.post("/reset-password", async (req, res, next) => {
+router.post("/reset-password", passwordResetLimiter, async (req, res, next) => {
   const { token, password, confirm } = req.body;
 
   if (!token || !password || !confirm) {

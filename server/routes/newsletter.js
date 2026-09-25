@@ -3,11 +3,13 @@ const Newsletter = require("../models/Newsletter");
 const { sendEmail } = require("../utils/email");
 const { newsletterConfirmationEmail } = require("../utils/emailTemplates");
 
+const { newsletterLimiter } = require("../middleware/security");
+
 const router = express.Router();
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-router.post("/newsletter/subscribe", async (req, res, next) => {
+router.post("/newsletter/subscribe", newsletterLimiter, async (req, res, next) => {
   const email = (req.body.email || "").trim();
 
   if (!EMAIL_REGEX.test(email)) {

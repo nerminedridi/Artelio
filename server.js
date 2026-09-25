@@ -18,6 +18,7 @@ const reportsRoutes = require("./server/routes/reports");
 const newsletterRoutes = require("./server/routes/newsletter");
 const AuthGuard = require("./server/middleware/auth");
 const accountContext = require("./server/middleware/accountContext");
+const { securityHeaders } = require("./server/middleware/security");
 const Artwork = require("./server/models/Artwork");
 const Showroom = require("./server/models/Showroom");
 const User = require("./server/models/User");
@@ -27,6 +28,7 @@ const PORT = process.env.PORT || 3000;
 
 app.set("trust proxy", 1);
 app.set("view engine", "ejs");
+app.use(securityHeaders);
 app.set("views", path.join(__dirname, "views", "pages"));
 
 app.use(express.json());
@@ -46,6 +48,7 @@ app.use(
     cookie: {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
     },
   })
 );
