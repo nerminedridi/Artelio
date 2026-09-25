@@ -1,6 +1,8 @@
 # Artelio
 
-A human-curated art marketplace built for the 2025–2026 web programming exam project. Artists upload and price artwork, curators build themed showrooms and approve submissions into them, visitors browse/comment/rate/buy through a cart with simulated payment, and an admin oversees the platform.
+[![CI](https://github.com/nerminedridi/Artelio/actions/workflows/ci.yml/badge.svg)](https://github.com/nerminedridi/Artelio/actions/workflows/ci.yml)
+
+A human-curated art marketplace, originally built as a 2025–2026 web programming exam project. Artists upload and price artwork, curators build themed showrooms and approve submissions into them, visitors browse/comment/rate/buy through a cart with simulated payment, and an admin oversees the platform.
 
 ## Tech stack
 
@@ -66,6 +68,12 @@ A full dump (schema + data, as captured for submission) is included at [`db/dump
 ```
 psql -U <user> -d artelio -f db/dump/artelio_dump.sql
 ```
+
+## Testing
+
+`npm test` runs unit tests (card validation, helpers) and HTTP integration tests (multi-account sessions, logout and caching, password reset, newsletter, checkout and commission math) using Node's built-in test runner and supertest.
+
+The integration tests need a dedicated Postgres database. Create one (for example `createdb artelio_test`), set `TEST_DATABASE_URL` in `.env`, and run `npm test`. The name must contain "test": the setup step drops, recreates and reseeds that database on every run, and refuses to touch anything else. CI runs the same suite against a Postgres service container on every push.
 
 ## Project structure
 
